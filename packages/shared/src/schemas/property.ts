@@ -20,10 +20,22 @@ export const SortBySchema = z.enum([
   'score-high'
 ]);
 
+const stringOrArray = z.preprocess((val) => {
+  if (typeof val === 'string') return [val];
+  if (Array.isArray(val)) return val;
+  return undefined;
+}, z.array(z.string()).optional());
+
+const propertyTypesOrArray = z.preprocess((val) => {
+  if (typeof val === 'string') return [val];
+  if (Array.isArray(val)) return val;
+  return undefined;
+}, z.array(PropertyTypeSchema).optional());
+
 export const PropertyFiltersSchema = z.object({
   keyword: z.string().optional(),
-  cities: z.array(z.string()).optional(),
-  districts: z.array(z.string()).optional(),
+  cities: stringOrArray,
+  districts: stringOrArray,
   minPrice: z.coerce.number().min(0).optional(),
   maxPrice: z.coerce.number().min(0).optional(),
   minArea: z.coerce.number().min(0).optional(),
@@ -34,12 +46,12 @@ export const PropertyFiltersSchema = z.object({
   maxRooms: z.coerce.number().min(1).optional(),
   minBuildYear: z.coerce.number().min(1800).max(2050).optional(),
   maxBuildYear: z.coerce.number().min(1800).max(2050).optional(),
-  propertyTypes: z.array(PropertyTypeSchema).optional(),
+  propertyTypes: propertyTypesOrArray,
   maxMaintenanceFee: z.coerce.number().min(0).optional(),
-  balconyRequired: z.coerce.boolean().optional(),
-  saunaRequired: z.coerce.boolean().optional(),
-  elevatorRequired: z.coerce.boolean().optional(),
-  newBuildingOnly: z.coerce.boolean().optional(),
+  balconyRequired: z.preprocess((v) => v === 'true' || v === true, z.boolean().optional()),
+  saunaRequired: z.preprocess((v) => v === 'true' || v === true, z.boolean().optional()),
+  elevatorRequired: z.preprocess((v) => v === 'true' || v === true, z.boolean().optional()),
+  newBuildingOnly: z.preprocess((v) => v === 'true' || v === true, z.boolean().optional()),
   sortBy: SortBySchema.optional().default('newest'),
   limit: z.coerce.number().min(1).max(100).optional().default(20),
   offset: z.coerce.number().min(0).optional().default(0)

@@ -20,6 +20,7 @@ import { FavoritesPage } from './features/favorites/FavoritesPage';
 import { ComparePage } from './features/compare/ComparePage';
 import { NotificationsPage } from './features/notifications/NotificationsPage';
 import { SettingsPage } from './features/settings/SettingsPage';
+import { DevDebugPage } from './features/dev/DevDebugPage';
 import { CreateSearchModal } from './features/saved-searches/CreateSearchModal';
 
 export const AppContent: React.FC = () => {
@@ -238,6 +239,7 @@ export const AppContent: React.FC = () => {
               />
             }
           />
+          <Route path="/dev" element={<DevDebugPage />} />
         </Routes>
       </main>
 

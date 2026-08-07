@@ -18,11 +18,18 @@ export async function jobsRoutes(server: FastifyInstance) {
 
     try {
       const dueSearches = await schedulerService.getDueSearches();
+      let totalNewProps = 0;
+      let totalPricesChanged = 0;
+      let totalNotificationsCreated = 0;
       const results = [];
 
       for (const search of dueSearches) {
         try {
           const runResult = await schedulerService.executeSearch(search.id);
+          totalNewProps += runResult.searchRun.newProperties;
+          totalPricesChanged += runResult.searchRun.priceChanges;
+          totalNotificationsCreated += (runResult.searchRun.newProperties + runResult.searchRun.priceChanges);
+
           results.push({
             savedSearchId: search.id,
             name: search.name,
@@ -42,7 +49,10 @@ export async function jobsRoutes(server: FastifyInstance) {
 
       return reply.send({
         success: true,
-        scannedCount: dueSearches.length,
+        processedSearches: dueSearches.length,
+        newProperties: totalNewProps,
+        priceChanges: totalPricesChanged,
+        notificationsCreated: totalNotificationsCreated,
         timestamp: new Date().toISOString(),
         results
       });

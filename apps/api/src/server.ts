@@ -8,6 +8,8 @@ import { notificationsRoutes } from './routes/notifications.routes';
 import { jobsRoutes } from './routes/jobs.routes';
 import { statsRoutes } from './routes/stats.routes';
 import { preferencesRoutes } from './routes/preferences.routes';
+import { systemRoutes } from './routes/system.routes';
+import { devRoutes } from './routes/dev.routes';
 
 export function buildServer() {
   const server = Fastify({
@@ -29,6 +31,8 @@ export function buildServer() {
   }));
 
   // API Route groups
+  server.register(systemRoutes, { prefix: '/api/system' });
+  server.register(devRoutes, { prefix: '/api/dev' });
   server.register(propertyRoutes, { prefix: '/api/properties' });
   server.register(savedSearchesRoutes, { prefix: '/api/saved-searches' });
   server.register(favoritesRoutes, { prefix: '/api/favorites' });

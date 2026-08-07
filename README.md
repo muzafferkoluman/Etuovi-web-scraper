@@ -204,6 +204,39 @@ To connect a new authorized data feed:
 
 ---
 
+## 🔍 Current Data Source
+
+The current MVP application uses **`MockPropertyProvider`** with 44 synthetic Finnish properties modelled against real market averages across:
+- **Helsinki**: Kallio, Kamppi, Töölö, Lauttasaari, Punavuori, Pasila, Kruununhaka, Kalasatama, Jätkäsaari, Haaga, Vuosaari
+- **Espoo**: Matinkylä, Tapiola, Leppävaara, Haukilahti, Otaniemi
+- **Vantaa**: Tikkurila, Myyrmäki, Kivistö, Korso
+- **Tampere**: Keskusta, Pyynikki, Tammela, Hervanta, Kaleva
+- **Turku**: Keskusta, Port Arthur, Kupittaa, Runosmäki
+
+A visible **`DEMO DATA`** indicator is displayed in the application header to avoid confusion.
+
+When connecting an authorized real estate portal, open MLS feed, or verified partner API, implement the `PropertyProvider` interface in `apps/api/src/providers/authorized-provider.ts`. The frontend and all scoring/diff pipelines will function seamlessly without any changes.
+
+---
+
+## 🧪 Runtime Verification
+
+The application has been verified through a full runtime and integration QA pass:
+
+1. **API & Server Health**: Fastify backend responds on `http://localhost:3000/health` with proper CORS, error serialization, and Zod query coercion.
+2. **Frontend Communication**: React Vite app communicates with backend via `/api` proxy and React Query.
+3. **Filter Pipeline**: Filtering by City, District, Max Price, Living Area (m²), Rooms (1–5+), Property Type, Maintenance Fee, and Amenities executes on the backend and updates the UI.
+4. **Saved Searches & Live "Run Now"**: Saved search creation, persistence, edit, delete, and manual execution ("Search complete. 3 new properties found, 2 price drops detected") tested and functional.
+5. **Diff Engine & Price Reductions**: `PRICE_DECREASED` correctly computes absolute difference and percentage (e.g. `-€20,000 / -8.03%`) without duplicate events.
+6. **Price History Snapshots**: Step-by-step price reduction history (e.g. `249,000 € -> 235,000 € -> 219,000 € -> 199,000 €`) renders in the property modal.
+7. **Property Comparison Matrix**: Supports 2 to 4 properties with favorable metric highlights and clear limit enforcement.
+8. **In-App Notifications**: Real-time unread bell badge, notification dropdown, and mark-as-read interactions.
+9. **Protected Cron Endpoint**: `POST /internal/jobs/run-scheduled-searches` rejects unauthorized calls without `CRON_SECRET` with 401, and executes due searches when authorized.
+10. **Development Simulator Page (`/dev`)**: Interactive testing triggers for price drops, new listings, and scheduler cron runs.
+11. **Responsive Testing**: Verified layout behavior at 375px (mobile drawer filters, single column cards), 768px, and 1440px.
+
+---
+
 ## 🛡️ Security & Ethical Principles
 
 - **No Unauthorized Scraping**: KotiScout does **NOT** implement anti-bot circumvention, CAPTCHA bypass, IP spoofing, or prohibited rate-limit evasion.

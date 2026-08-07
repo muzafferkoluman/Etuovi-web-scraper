@@ -66,6 +66,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <span className="text-[10px] uppercase tracking-wider bg-emerald-100 text-emerald-800 font-semibold px-1.5 py-0.5 rounded">
                     FI
                   </span>
+                  <span className="text-[9px] uppercase tracking-wider bg-amber-100 text-amber-900 font-extrabold px-1.5 py-0.5 rounded border border-amber-200" title="MockPropertyProvider is currently active with synthetic Finnish demo data">
+                    DEMO DATA
+                  </span>
                 </span>
                 <span className="text-[11px] text-slate-500 font-medium -mt-1">
                   Property Intelligence
