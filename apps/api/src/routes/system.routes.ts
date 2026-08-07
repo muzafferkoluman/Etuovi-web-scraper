@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { dbRepository } from '@koti-scout/database';
+import { dbRepository, checkDatabaseHealth, getDatabaseMode } from '@koti-scout/database';
 import { searchService } from '../services/search.service';
 
 export async function systemRoutes(server: FastifyInstance) {
@@ -12,6 +12,18 @@ export async function systemRoutes(server: FastifyInstance) {
       propertiesAvailable: total,
       mode: searchService.getProviderName() === 'MockPropertyProvider' ? 'demo' : 'production',
       timezone: process.env.DEFAULT_TIMEZONE || 'Europe/Helsinki'
+    });
+  });
+
+  // GET /api/system/database (Step 28)
+  server.get('/database', async (_request, reply) => {
+    const health = await checkDatabaseHealth();
+    return reply.send({
+      mode: health.mode,
+      healthy: health.healthy,
+      latencyMs: health.latencyMs,
+      timestamp: health.timestamp,
+      environment: process.env.NODE_ENV || 'development'
     });
   });
 }

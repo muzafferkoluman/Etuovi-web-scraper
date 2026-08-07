@@ -10,6 +10,7 @@ import { statsRoutes } from './routes/stats.routes';
 import { preferencesRoutes } from './routes/preferences.routes';
 import { systemRoutes } from './routes/system.routes';
 import { devRoutes } from './routes/dev.routes';
+import { authPlugin } from './plugins/auth';
 
 export function buildServer() {
   const server = Fastify({
@@ -22,6 +23,7 @@ export function buildServer() {
   });
 
   server.register(sensible);
+  server.register(authPlugin);
 
   // Health check
   server.get('/health', async () => ({

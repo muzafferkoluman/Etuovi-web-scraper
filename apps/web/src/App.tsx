@@ -21,6 +21,9 @@ import { ComparePage } from './features/compare/ComparePage';
 import { NotificationsPage } from './features/notifications/NotificationsPage';
 import { SettingsPage } from './features/settings/SettingsPage';
 import { DevDebugPage } from './features/dev/DevDebugPage';
+import { LoginPage } from './features/auth/LoginPage';
+import { SignupPage } from './features/auth/SignupPage';
+import { AuthProvider } from './contexts/AuthContext';
 import { CreateSearchModal } from './features/saved-searches/CreateSearchModal';
 
 export const AppContent: React.FC = () => {
@@ -239,6 +242,8 @@ export const AppContent: React.FC = () => {
               />
             }
           />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
           <Route path="/dev" element={<DevDebugPage />} />
         </Routes>
       </main>
@@ -262,7 +267,9 @@ export const AppContent: React.FC = () => {
 export const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </BrowserRouter>
   );
 };

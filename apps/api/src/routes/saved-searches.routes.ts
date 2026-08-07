@@ -4,16 +4,16 @@ import { dbRepository } from '@koti-scout/database';
 import { schedulerService } from '../services/scheduler.service';
 
 export async function savedSearchesRoutes(server: FastifyInstance) {
-  const currentUserId = 'user-demo-01'; // Supabase auth contextual user
-
   // GET /api/saved-searches
-  server.get('/', async (_request, reply) => {
-    const searches = await dbRepository.getSavedSearches(currentUserId);
+  server.get('/', async (request, reply) => {
+    const userId = request.user.id;
+    const searches = await dbRepository.getSavedSearches(userId);
     return reply.send(searches);
   });
 
   // POST /api/saved-searches
   server.post('/', async (request, reply) => {
+    const userId = request.user.id;
     const parseResult = CreateSavedSearchSchema.safeParse(request.body);
     if (!parseResult.success) {
       return reply.status(400).send({
@@ -25,7 +25,7 @@ export async function savedSearchesRoutes(server: FastifyInstance) {
     const data = parseResult.data;
     const newSearch: SavedSearch = {
       id: `search-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
-      userId: currentUserId,
+      userId,
       name: data.name,
       filters: data.filters,
       minimumScore: data.minimumScore,
@@ -65,7 +65,8 @@ export async function savedSearchesRoutes(server: FastifyInstance) {
   // DELETE /api/saved-searches/:id
   server.delete('/:id', async (request, reply) => {
     const { id } = request.params as { id: string };
-    const deleted = await dbRepository.deleteSavedSearch(id);
+    const userId = request.user.id;
+    const deleted = await dbRepository.deleteSavedSearch(id, userId);
     if (!deleted) {
       return reply.status(404).send({ error: 'Saved search not found' });
     }

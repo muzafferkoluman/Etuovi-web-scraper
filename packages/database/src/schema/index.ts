@@ -43,13 +43,16 @@ export const properties = pgTable(
     publishedAt: timestamp('published_at', { withTimezone: true }).notNull(),
     firstSeenAt: timestamp('first_seen_at', { withTimezone: true }).defaultNow().notNull(),
     lastSeenAt: timestamp('last_seen_at', { withTimezone: true }).defaultNow().notNull(),
-    active: boolean('active').default(true).notNull()
+    active: boolean('active').default(true).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull()
   },
   (table) => [
-    uniqueIndex('properties_external_id_provider_idx').on(table.externalId, table.provider),
+    uniqueIndex('properties_external_id_provider_idx').on(table.provider, table.externalId),
     index('properties_city_district_idx').on(table.city, table.district),
     index('properties_price_idx').on(table.price),
-    index('properties_area_idx').on(table.area)
+    index('properties_area_idx').on(table.area),
+    index('properties_active_idx').on(table.active)
   ]
 );
 
@@ -81,16 +84,18 @@ export const savedSearches = pgTable(
     minimumScore: integer('minimum_score').default(70).notNull(),
     enabled: boolean('enabled').default(true).notNull(),
     scheduleType: text('schedule_type').default('ONCE_DAILY').notNull(),
+    scheduleConfig: jsonb('schedule_config').$type<Record<string, unknown>>().default({}),
     customScheduleTimes: jsonb('custom_schedule_times').$type<string[]>().default([]),
     timezone: text('timezone').default('Europe/Helsinki').notNull(),
     notificationSettings: jsonb('notification_settings').notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
-    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
     lastRunAt: timestamp('last_run_at', { withTimezone: true }),
-    nextRunAt: timestamp('next_run_at', { withTimezone: true })
+    nextRunAt: timestamp('next_run_at', { withTimezone: true }),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull()
   },
   (table) => [
-    index('saved_searches_user_id_idx').on(table.userId)
+    index('saved_searches_user_id_idx').on(table.userId),
+    index('saved_searches_enabled_next_run_idx').on(table.enabled, table.nextRunAt)
   ]
 );
 
@@ -112,7 +117,7 @@ export const searchRuns = pgTable(
     errorMessage: text('error_message')
   },
   (table) => [
-    index('search_runs_saved_search_id_idx').on(table.savedSearchId)
+    index('search_runs_saved_search_started_idx').on(table.savedSearchId, table.startedAt)
   ]
 );
 
@@ -125,7 +130,8 @@ export const favorites = pgTable(
       .notNull()
       .references(() => properties.id, { onDelete: 'cascade' }),
     notes: text('notes').default('').notNull(),
-    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull()
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull()
   },
   (table) => [
     uniqueIndex('favorites_user_property_idx').on(table.userId, table.propertyId),
@@ -140,6 +146,7 @@ export const notifications = pgTable(
     userId: text('user_id').notNull(),
     savedSearchId: text('saved_search_id'),
     propertyId: text('property_id'),
+    propertyEventId: text('property_event_id'),
     type: text('type').notNull(),
     title: text('title').notNull(),
     message: text('message').notNull(),
@@ -147,7 +154,7 @@ export const notifications = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull()
   },
   (table) => [
-    index('notifications_user_read_idx').on(table.userId, table.read)
+    index('notifications_user_read_created_idx').on(table.userId, table.read, table.createdAt)
   ]
 );
 
@@ -168,7 +175,7 @@ export const propertyEvents = pgTable(
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull()
   },
   (table) => [
-    index('property_events_property_id_idx').on(table.propertyId)
+    index('property_events_property_created_idx').on(table.propertyId, table.createdAt)
   ]
 );
 

@@ -2,12 +2,11 @@ import { FastifyInstance } from 'fastify';
 import { dbRepository } from '@koti-scout/database';
 
 export async function notificationsRoutes(server: FastifyInstance) {
-  const currentUserId = 'user-demo-01';
-
   // GET /api/notifications
-  server.get('/', async (_request, reply) => {
-    const list = await dbRepository.getNotifications(currentUserId);
-    const unreadCount = list.filter(n => !n.read).length;
+  server.get('/', async (request, reply) => {
+    const userId = request.user.id;
+    const list = await dbRepository.getNotifications(userId);
+    const unreadCount = list.filter((n) => !n.read).length;
     return reply.send({
       notifications: list,
       unreadCount
@@ -16,8 +15,9 @@ export async function notificationsRoutes(server: FastifyInstance) {
 
   // PATCH /api/notifications/:id/read
   server.patch('/:id/read', async (request, reply) => {
+    const userId = request.user.id;
     const { id } = request.params as { id: string };
-    const success = await dbRepository.markNotificationAsRead(id);
+    const success = await dbRepository.markNotificationAsRead(id, userId);
     if (!success) {
       return reply.status(404).send({ error: 'Notification not found' });
     }
@@ -25,8 +25,9 @@ export async function notificationsRoutes(server: FastifyInstance) {
   });
 
   // PATCH /api/notifications/read-all
-  server.patch('/read-all', async (_request, reply) => {
-    const count = await dbRepository.markAllNotificationsAsRead(currentUserId);
+  server.patch('/read-all', async (request, reply) => {
+    const userId = request.user.id;
+    const count = await dbRepository.markAllNotificationsAsRead(userId);
     return reply.send({ success: true, markedCount: count });
   });
 }

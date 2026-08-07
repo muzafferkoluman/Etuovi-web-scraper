@@ -131,7 +131,9 @@ export async function devRoutes(server: FastifyInstance) {
 
   // POST /api/dev/reset-state
   server.post('/reset-state', async (_request, reply) => {
-    dbRepository.seedDefaults();
+    if (dbRepository.resetDefaults) {
+      await dbRepository.resetDefaults();
+    }
     searchCache.clear();
     return reply.send({
       success: true,

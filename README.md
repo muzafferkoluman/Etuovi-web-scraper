@@ -237,9 +237,72 @@ The application has been verified through a full runtime and integration QA pass
 
 ---
 
+---
+
+## ⚡ Supabase & PostgreSQL Persistence
+
+### Database Modes
+
+KotiScout supports two decoupled database runtime modes:
+
+1. **`DATABASE_MODE=memory` (Default)**:
+   - Instant, zero-friction local development without requiring any external database credentials or cloud services.
+   - Pre-seeded with 44 Finnish properties, price history snapshots, saved searches, and sample notifications.
+2. **`DATABASE_MODE=postgres`**:
+   - Production PostgreSQL persistence with Supabase.
+   - Uses Drizzle ORM, transactions, connection pooling, and strict `(provider, external_id)` unique indexes.
+
+### Step-by-Step Supabase Setup
+
+1. **Create Supabase Project**:
+   - Sign in to [database.new](https://database.new) and create a new project.
+2. **Retrieve API Keys & Connection String**:
+   - In Project Settings -> API, copy your `Project URL`, `anon / public key`, and `service_role key`.
+   - In Database Settings, copy your PostgreSQL `Connection string (URI)`.
+3. **Configure Environment Variables (`.env`)**:
+   ```env
+   DATABASE_MODE=postgres
+   DATABASE_URL=postgresql://postgres:[YOUR-PASSWORD]@db.[YOUR-PROJECT-REF].supabase.co:5432/postgres
+
+   # Server-side Supabase keys (NEVER expose to browser):
+   SUPABASE_URL=https://[YOUR-PROJECT-REF].supabase.co
+   SUPABASE_ANON_KEY=[YOUR-ANON-KEY]
+   SUPABASE_SERVICE_ROLE_KEY=[YOUR-SERVICE-ROLE-KEY]
+   CRON_SECRET=[YOUR-RANDOM-SECURE-SECRET]
+
+   # Frontend Browser-safe keys:
+   VITE_SUPABASE_URL=https://[YOUR-PROJECT-REF].supabase.co
+   VITE_SUPABASE_ANON_KEY=[YOUR-ANON-KEY]
+   ```
+4. **Run Migrations & Seed**:
+   ```bash
+   # Generate Drizzle migration files
+   npm run db:generate
+
+   # Apply Row Level Security (RLS) policies
+   # Run packages/database/migrations/0001_rls_policies.sql in the Supabase SQL Editor
+   ```
+5. **Start Application**:
+   ```bash
+   npm run dev
+   ```
+
+---
+
+## 🔐 Authentication & Row Level Security (RLS)
+
+- **Supabase Auth**: Email + password with magic link compatibility.
+- **Server JWT Verification**: The Fastify API reads `Authorization: Bearer <token>` and verifies the JWT server-side via Supabase Auth before binding `request.user.id`. The backend **never** trusts `userId` in request bodies.
+- **Row Level Security (RLS)**:
+  - Users have full private CRUD over their own `profiles`, `saved_searches`, `favorites`, `notifications`, `search_runs`, and `user_preferences`.
+  - Application property market records (`properties`, `property_snapshots`, `property_events`) are shared read-only across all users.
+- **Client Cache Isolation**: TanStack Query cache is automatically flushed on logout (`queryClient.clear()`) to prevent data leaking between user accounts.
+
+---
+
 ## 🛡️ Security & Ethical Principles
 
 - **No Unauthorized Scraping**: KotiScout does **NOT** implement anti-bot circumvention, CAPTCHA bypass, IP spoofing, or prohibited rate-limit evasion.
 - **Extensible Architecture**: Built on clean provider adapters and official authorized data interfaces.
-- **Server-Side Protection**: All secrets (`CRON_SECRET`, `SUPABASE_SERVICE_ROLE_KEY`) remain strictly on the backend.
-- **Row Level Security (RLS)**: Users only access their own saved searches, favorites, notifications, and preferences.
+- **Server-Side Protection**: All secrets (`CRON_SECRET`, `SUPABASE_SERVICE_ROLE_KEY`, `DATABASE_URL`) remain strictly on the backend.
+- **Row Level Security (RLS)**: Database policies enforce user data isolation directly at the PostgreSQL layer.

@@ -11,10 +11,12 @@ import {
   CheckCheck,
   TrendingDown,
   Building,
-  Heart
+  Heart,
+  LogOut
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { AppNotification } from '@koti-scout/shared';
+import { useAuth } from '../contexts/AuthContext';
 
 interface NavbarProps {
   notifications: AppNotification[];
@@ -34,6 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenNotificationProperty
 }) => {
   const location = useLocation();
+  const { user, signOut } = useAuth();
   const [showNotifMenu, setShowNotifMenu] = useState(false);
 
   const navItems = [
@@ -214,6 +217,29 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 Helsinki (EET)
               </div>
+
+              {user ? (
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-900">
+                    <span className="w-2 h-2 rounded-full bg-emerald-600" />
+                    <span className="max-w-[110px] truncate">{user.fullName || user.email.split('@')[0]}</span>
+                  </div>
+                  <button
+                    onClick={() => signOut()}
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 text-xs font-medium transition-colors"
+                    title="Sign Out"
+                  >
+                    <LogOut className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  to="/login"
+                  className="px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-colors shadow-sm"
+                >
+                  Sign In
+                </Link>
+              )}
             </div>
           </div>
         </div>

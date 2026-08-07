@@ -14,6 +14,8 @@ import {
   Layers
 } from 'lucide-react';
 
+import { useAuth } from '../../contexts/AuthContext';
+
 interface DevStatus {
   provider: string;
   databaseMode: string;
@@ -26,8 +28,16 @@ interface DevStatus {
   environment: string;
 }
 
+interface DbHealth {
+  mode: string;
+  healthy: boolean;
+  latencyMs?: number;
+}
+
 export const DevDebugPage: React.FC = () => {
+  const { user } = useAuth();
   const [status, setStatus] = useState<DevStatus | null>(null);
+  const [dbHealth, setDbHealth] = useState<DbHealth | null>(null);
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
   const [logMessages, setLogMessages] = useState<Array<{ id: string; time: string; text: string; success: boolean }>>([]);
 
@@ -37,6 +47,11 @@ export const DevDebugPage: React.FC = () => {
       if (res.ok) {
         const data = await res.json();
         setStatus(data);
+      }
+      const dbRes = await fetch('/api/system/database');
+      if (dbRes.ok) {
+        const healthData = await dbRes.json();
+        setDbHealth(healthData);
       }
     } catch (err) {
       console.error(err);
