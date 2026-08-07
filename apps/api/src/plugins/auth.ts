@@ -14,8 +14,13 @@ declare module 'fastify' {
 const authPluginCallback: FastifyPluginAsync = async (server) => {
   let supabase: SupabaseClient | null = null;
 
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_ANON_KEY;
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://svhqizfopfjynodnbwyg.supabase.co';
+  const supabaseKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    'sb_publishable_LqgvXVi0ogZ19CNkEYnYzw_skRSM2eP';
 
   if (supabaseUrl && supabaseKey) {
     try {
