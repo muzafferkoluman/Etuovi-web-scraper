@@ -1,23 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Property, PropertySnapshot, PropertyEvent } from '@koti-scout/shared';
-import { Modal } from '../../components/ui/Modal';
-import { formatEuro, formatSqmPrice } from '../../lib/utils';
-import { ScoreBreakdownWidget } from './ScoreBreakdownWidget';
-import { PriceHistoryChart } from './PriceHistoryChart';
-import { DealBadge } from './DealBadge';
-import { api } from '../../lib/api-client';
-import {
-  Heart,
-  ExternalLink,
-  MapPin,
-  Building,
-  Check,
-  Zap,
-  Info,
-  Calendar,
-  Layers
-} from 'lucide-react';
-import { Button } from '../../components/ui/Button';
+import React, { useEffect, useState } from "react";
+import { Property, PropertySnapshot } from "@koti-scout/shared";
+import { formatEuro, formatSqmPrice } from "../../lib/utils";
+import { Modal } from "../../components/ui/Modal";
+import { Button } from "../../components/ui/Button";
+import { MapPin, Heart, Building, ExternalLink } from "lucide-react";
+import { DealBadge } from "./DealBadge";
+import { ScoreBreakdownWidget } from "./ScoreBreakdownWidget";
+import { PriceHistoryChart } from "./PriceHistoryChart";
+import { api } from "../../lib/api-client";
 
 export interface PropertyDetailModalProps {
   property: Property | null;
@@ -28,22 +18,39 @@ export interface PropertyDetailModalProps {
 }
 
 export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
-  property,
+  property: initialProperty,
   isOpen,
   onClose,
   isFavorite,
   onToggleFavorite
 }) => {
+  const [property, setProperty] = useState<Property | null>(initialProperty);
   const [snapshots, setSnapshots] = useState<PropertySnapshot[]>([]);
   const [activePhotoIdx, setActivePhotoIdx] = useState(0);
+  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
 
   useEffect(() => {
-    if (property && isOpen) {
-      api.getPropertyHistory(property.id)
+    setProperty(initialProperty);
+    setActivePhotoIdx(0);
+
+    if (initialProperty && isOpen) {
+      setIsLoadingDetails(true);
+
+      // Fetch full property details from live API to populate maintenance fee, energy class, full photos etc.
+      api.getProperty(initialProperty.id)
+        .then((fullProperty) => {
+          if (fullProperty) {
+            setProperty(fullProperty);
+          }
+        })
+        .catch(() => {})
+        .finally(() => setIsLoadingDetails(false));
+
+      api.getPropertyHistory(initialProperty.id)
         .then((res) => setSnapshots(res.snapshots))
         .catch(() => setSnapshots([]));
     }
-  }, [property, isOpen]);
+  }, [initialProperty, isOpen]);
 
   if (!property) return null;
 
@@ -57,7 +64,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
           <div>
             <div className="flex items-center gap-1.5 text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">
               <MapPin className="w-3.5 h-3.5 text-emerald-600" />
-              <span>{property.district}, {property.city}</span>
+              <span>{property.district || property.city}, {property.city}</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-slate-900">{property.address}</h2>
             <p className="text-xs text-slate-500 mt-0.5">{property.title}</p>
@@ -74,12 +81,12 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
             </div>
 
             <Button
-              variant={isFavorite ? 'danger' : 'outline'}
+              variant={isFavorite ? "danger" : "outline"}
               size="icon"
               onClick={() => onToggleFavorite(property.id)}
-              title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+              title={isFavorite ? "Remove from favorites" : "Add to favorites"}
             >
-              <Heart className={`w-5 h-5 ${isFavorite ? 'fill-white' : ''}`} />
+              <Heart className={`w-5 h-5 ${isFavorite ? "fill-white" : ""}`} />
             </Button>
           </div>
         </div>
@@ -106,7 +113,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
                   key={img + idx}
                   onClick={() => setActivePhotoIdx(idx)}
                   className={`relative w-20 h-14 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${
-                    idx === activePhotoIdx ? 'border-emerald-600 ring-2 ring-emerald-200' : 'border-transparent opacity-70'
+                    idx === activePhotoIdx ? "border-emerald-600 ring-2 ring-emerald-200" : "border-transparent opacity-70"
                   }`}
                 >
                   <img src={img} alt="thumbnail" className="w-full h-full object-cover" />
@@ -130,9 +137,16 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
 
         {/* Property Specs Table */}
         <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
-          <h3 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-1.5">
-            <Building className="w-4 h-4 text-emerald-600" />
-            <span>Property Specifications</span>
+          <h3 className="text-sm font-bold text-slate-900 mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <Building className="w-4 h-4 text-emerald-600" />
+              <span>Property Specifications</span>
+            </div>
+            {isLoadingDetails && (
+              <span className="text-xs font-normal text-emerald-600 animate-pulse">
+                Fetching live details from Etuovi...
+              </span>
+            )}
           </h3>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-3 gap-x-4 text-xs">
@@ -150,39 +164,39 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
             </div>
             <div>
               <span className="text-slate-500 block">Build Year</span>
-              <span className="font-semibold text-slate-800">{property.buildYear || '—'}</span>
+              <span className="font-semibold text-slate-800">{property.buildYear || "—"}</span>
             </div>
             <div>
               <span className="text-slate-500 block">Monthly Maintenance</span>
-              <span className="font-semibold text-slate-800">
-                {property.maintenanceFee ? `${property.maintenanceFee} € / month` : 'N/A'}
+              <span className="font-semibold text-emerald-700">
+                {property.maintenanceFee ? `${property.maintenanceFee} € / month` : (isLoadingDetails ? "Loading..." : "See original listing")}
               </span>
             </div>
             <div>
               <span className="text-slate-500 block">Floor</span>
               <span className="font-semibold text-slate-800">
-                {property.floor ? `${property.floor} / ${property.totalFloors || '—'}` : '—'}
+                {property.floor ? `${property.floor} / ${property.totalFloors || "—"}` : "—"}
               </span>
             </div>
             <div>
               <span className="text-slate-500 block">Energy Class</span>
-              <span className="font-semibold text-slate-800">{property.energyClass || 'E2018'}</span>
+              <span className="font-semibold text-slate-800">{property.energyClass || "E2018"}</span>
             </div>
             <div>
               <span className="text-slate-500 block">Sauna</span>
-              <span className="font-semibold text-slate-800">{property.hasSauna ? 'Yes (Oma sauna)' : 'No'}</span>
+              <span className="font-semibold text-slate-800">{property.hasSauna ? "Yes (Oma sauna)" : "No"}</span>
             </div>
             <div>
               <span className="text-slate-500 block">Balcony</span>
-              <span className="font-semibold text-slate-800">{property.hasBalcony ? 'Yes (Parveke)' : 'No'}</span>
+              <span className="font-semibold text-slate-800">{property.hasBalcony ? "Yes (Parveke)" : "No"}</span>
             </div>
             <div>
               <span className="text-slate-500 block">Elevator</span>
-              <span className="font-semibold text-slate-800">{property.hasElevator ? 'Yes (Hissi)' : 'No'}</span>
+              <span className="font-semibold text-slate-800">{property.hasElevator ? "Yes (Hissi)" : "No"}</span>
             </div>
             <div>
               <span className="text-slate-500 block">Postal Code</span>
-              <span className="font-semibold text-slate-800">{property.postalCode} {property.city}</span>
+              <span className="font-semibold text-slate-800">{property.postalCode ? `${property.postalCode} ${property.city}` : property.city}</span>
             </div>
             <div>
               <span className="text-slate-500 block">Provider</span>

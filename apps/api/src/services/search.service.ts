@@ -1,8 +1,21 @@
-import { PropertyProvider } from '../providers/types';
-import { MockPropertyProvider } from '../providers/mock-provider';
-import { Property, PropertyFilters, PropertySearchResult } from '@koti-scout/shared';
-import { PropertyScoringEngine, DealFinderEngine, SmartTagsEngine } from '@koti-scout/property-engine';
-import { dbRepository } from '@koti-scout/database';
+import { PropertyProvider } from "../providers/types";
+import { MockPropertyProvider } from "../providers/mock-provider";
+import { AuthorizedPropertyProvider } from "../providers/authorized-provider";
+import { EtuoviLivePropertyProvider } from "../providers/etuovi-live-provider";
+import { Property, PropertyFilters, PropertySearchResult } from "@koti-scout/shared";
+import { PropertyScoringEngine, DealFinderEngine, SmartTagsEngine } from "@koti-scout/property-engine";
+import { dbRepository } from "@koti-scout/database";
+
+export function resolveDefaultProvider(): PropertyProvider {
+  const providerType = (process.env.PROPERTY_PROVIDER || "etuovi").toLowerCase();
+  if (providerType === "mock" || providerType === "demo") {
+    return new MockPropertyProvider();
+  }
+  if (providerType === "authorized") {
+    return new AuthorizedPropertyProvider();
+  }
+  return new EtuoviLivePropertyProvider();
+}
 
 export class PropertySearchService {
   private provider: PropertyProvider;
@@ -11,7 +24,7 @@ export class PropertySearchService {
   private smartTagsEngine: SmartTagsEngine;
 
   constructor(provider?: PropertyProvider) {
-    this.provider = provider || new MockPropertyProvider();
+    this.provider = provider || resolveDefaultProvider();
     this.scoringEngine = new PropertyScoringEngine();
     this.dealFinder = new DealFinderEngine();
     this.smartTagsEngine = new SmartTagsEngine();
@@ -28,9 +41,15 @@ export class PropertySearchService {
   public async search(filters: PropertyFilters): Promise<PropertySearchResult> {
     const rawResult = await this.provider.search(filters);
 
-    // Enrich each property with scoring, deal detection, and smart tags
     const enrichedProperties: Property[] = await Promise.all(
       rawResult.properties.map(async (property) => {
+        // Persist/upsert property into database for snapshot tracking
+        try {
+          await dbRepository.upsertProperty(property);
+        } catch (err) {
+          // Ignore DB upsert errors if DB mode is minimal
+        }
+
         const snapshots = await dbRepository.getPropertySnapshots(property.id);
         const hasPriceDrop = snapshots.length >= 2 && snapshots[snapshots.length - 1].price < snapshots[0].price;
 
@@ -70,7 +89,21 @@ export class PropertySearchService {
     snapshots: Awaited<ReturnType<typeof dbRepository.getPropertySnapshots>>;
     events: Awaited<ReturnType<typeof dbRepository.getPropertyEvents>>;
   } | null> {
-    const property = await dbRepository.getPropertyById(id);
+    let property = await dbRepository.getPropertyById(id);
+
+    // If property not found in local DB, attempt live fetch from provider
+    if (!property) {
+      const liveProperty = await this.provider.getProperty(id);
+      if (liveProperty) {
+        try {
+          await dbRepository.upsertProperty(liveProperty);
+          property = await dbRepository.getPropertyById(id) || liveProperty;
+        } catch {
+          property = liveProperty;
+        }
+      }
+    }
+
     if (!property) return null;
 
     const snapshots = await dbRepository.getPropertySnapshots(id);
