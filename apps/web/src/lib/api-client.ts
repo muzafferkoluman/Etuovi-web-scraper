@@ -55,6 +55,7 @@ export const api = {
     if (filters.maxPrice !== undefined) params.append('maxPrice', String(filters.maxPrice));
     if (filters.minArea !== undefined) params.append('minArea', String(filters.minArea));
     if (filters.maxArea !== undefined) params.append('maxArea', String(filters.maxArea));
+    if (filters.rooms?.length) filters.rooms.forEach(r => params.append('rooms', String(r)));
     if (filters.minRooms !== undefined) params.append('minRooms', String(filters.minRooms));
     if (filters.maxRooms !== undefined) params.append('maxRooms', String(filters.maxRooms));
     if (filters.minBuildYear !== undefined) params.append('minBuildYear', String(filters.minBuildYear));

@@ -40,9 +40,14 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   };
 
   const handleRoomToggle = (roomCount: number) => {
+    const current = filters.rooms || (filters.minRooms ? [filters.minRooms] : []);
+    const updated = current.includes(roomCount)
+      ? current.filter((r) => r !== roomCount)
+      : [...current, roomCount];
     onChange({
       ...filters,
-      minRooms: filters.minRooms === roomCount ? undefined : roomCount
+      minRooms: undefined,
+      rooms: updated.length > 0 ? updated : undefined
     });
   };
 
@@ -179,7 +184,8 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
         <label className="text-xs font-bold text-slate-700 block">Rooms</label>
         <div className="grid grid-cols-5 gap-1.5">
           {[1, 2, 3, 4, 5].map((r) => {
-            const isSelected = filters.minRooms === r;
+            const selectedRooms = filters.rooms || (filters.minRooms ? [filters.minRooms] : []);
+            const isSelected = selectedRooms.includes(r);
             return (
               <button
                 key={r}

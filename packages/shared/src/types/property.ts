@@ -101,6 +101,7 @@ export interface PropertyFilters {
 
   minRooms?: number;
   maxRooms?: number;
+  rooms?: number[];
 
   minBuildYear?: number;
   maxBuildYear?: number;

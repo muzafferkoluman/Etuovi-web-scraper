@@ -35,6 +35,12 @@ export class PropertyMatchingEngine {
     if (filters.minPricePerSquareMeter !== undefined && property.pricePerSquareMeter < filters.minPricePerSquareMeter) return false;
     if (filters.maxPricePerSquareMeter !== undefined && property.pricePerSquareMeter > filters.maxPricePerSquareMeter) return false;
 
+    // Multi-select Rooms
+    if (filters.rooms && filters.rooms.length > 0) {
+      const roomMatch = filters.rooms.some(r => r >= 5 ? property.rooms >= 5 : property.rooms === r);
+      if (!roomMatch) return false;
+    }
+
     // Rooms
     if (filters.minRooms !== undefined && property.rooms < filters.minRooms) return false;
     if (filters.maxRooms !== undefined && property.rooms > filters.maxRooms) return false;

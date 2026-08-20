@@ -58,6 +58,23 @@ export class EtuoviLivePropertyProvider implements PropertyProvider {
       let properties = announcements.map((ann) => this.mapAnnouncementToProperty(ann));
       properties = this.applyLocalFilters(properties, filters);
 
+      // Enrich top 15 properties in parallel with maintenance fee (Hoitovastike) from detail pages
+      const topSlice = properties.slice(0, 15);
+      await Promise.all(
+        topSlice.map(async (prop) => {
+          try {
+            const detailUrl = `${this.baseUrl}/kohde/${prop.externalId}`;
+            const detailHtml = await this.fetchHtml(detailUrl);
+            const fee = this.extractMaintenanceFee(detailHtml);
+            if (fee !== null) {
+              prop.maintenanceFee = fee;
+            }
+          } catch {
+            // Silently retain base property if individual detail fetch fails
+          }
+        })
+      );
+
       const page = Math.floor((filters.offset || 0) / (filters.limit || 20)) + 1;
       const pageSize = filters.limit || 20;
 
@@ -94,7 +111,12 @@ export class EtuoviLivePropertyProvider implements PropertyProvider {
         return null;
       }
 
-      return this.mapItemDataToProperty(cleanId, itemData);
+      const prop = this.mapItemDataToProperty(cleanId, itemData);
+      const htmlFee = this.extractMaintenanceFee(html);
+      if (htmlFee !== null) {
+        prop.maintenanceFee = htmlFee;
+      }
+      return prop;
     } catch (error) {
       console.error(`[EtuoviLivePropertyProvider] Error fetching property ${externalId}:`, error);
       return null;
@@ -135,6 +157,13 @@ export class EtuoviLivePropertyProvider implements PropertyProvider {
     }
     if (filters.maxBuildYear !== undefined) {
       queryParams.set("vuosimyyntimax", filters.maxBuildYear.toString());
+    }
+
+    // Multi-room query params
+    if (filters.rooms && filters.rooms.length > 0) {
+      filters.rooms.forEach((r) => queryParams.append("huoneita", r.toString()));
+    } else if (filters.minRooms !== undefined) {
+      queryParams.set("huoneita", filters.minRooms.toString());
     }
 
     const page = Math.floor((filters.offset || 0) / (filters.limit || 20)) + 1;
@@ -188,6 +217,22 @@ export class EtuoviLivePropertyProvider implements PropertyProvider {
         return null;
       }
     }
+  }
+
+  private extractMaintenanceFee(html: string): number | null {
+    // Regex 1: Hoitovastike followed by amount € / kk
+    const match1 = html.match(/Hoitovastike[\s\S]{1,250}?([\d\s]+[,.]\d{2})\s*€\s*\/\s*kk/i);
+    if (match1) {
+      const val = parseFloat(match1[1].replace(/\s/g, "").replace(",", "."));
+      if (!isNaN(val)) return val;
+    }
+    // Regex 2: Yhtiövastike yhteensä
+    const match2 = html.match(/Yhtiövastike yhteensä[\s\S]{1,250}?([\d\s]+[,.]\d{2})\s*€\s*\/\s*kk/i);
+    if (match2) {
+      const val = parseFloat(match2[1].replace(/\s/g, "").replace(",", "."));
+      if (!isNaN(val)) return val;
+    }
+    return null;
   }
 
   private mapAnnouncementToProperty(ann: EtuoviAnnouncement): Property {
@@ -404,8 +449,15 @@ export class EtuoviLivePropertyProvider implements PropertyProvider {
       if (filters.maxPrice !== undefined && p.price > filters.maxPrice) return false;
       if (filters.minArea !== undefined && p.area < filters.minArea) return false;
       if (filters.maxArea !== undefined && p.area > filters.maxArea) return false;
-      if (filters.minRooms !== undefined && p.rooms < filters.minRooms) return false;
-      if (filters.maxRooms !== undefined && p.rooms > filters.maxRooms) return false;
+
+      // Multi-room filter
+      if (filters.rooms && filters.rooms.length > 0) {
+        const roomMatch = filters.rooms.some((r) => (r >= 5 ? p.rooms >= 5 : p.rooms === r));
+        if (!roomMatch) return false;
+      } else if (filters.minRooms !== undefined && p.rooms < filters.minRooms) {
+        return false;
+      }
+
       if (filters.maxMaintenanceFee !== undefined && p.maintenanceFee !== null && p.maintenanceFee > filters.maxMaintenanceFee) return false;
 
       if (filters.balconyRequired && !p.hasBalcony) return false;

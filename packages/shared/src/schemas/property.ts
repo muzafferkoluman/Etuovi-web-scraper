@@ -44,6 +44,12 @@ export const PropertyFiltersSchema = z.object({
   maxPricePerSquareMeter: z.coerce.number().min(0).optional(),
   minRooms: z.coerce.number().min(1).optional(),
   maxRooms: z.coerce.number().min(1).optional(),
+  rooms: z.preprocess((val) => {
+    if (typeof val === "number") return [val];
+    if (typeof val === "string") return val.split(",").map(Number).filter((n) => !isNaN(n));
+    if (Array.isArray(val)) return val.map(Number).filter((n) => !isNaN(n));
+    return undefined;
+  }, z.array(z.number()).optional()),
   minBuildYear: z.coerce.number().min(1800).max(2050).optional(),
   maxBuildYear: z.coerce.number().min(1800).max(2050).optional(),
   propertyTypes: propertyTypesOrArray,

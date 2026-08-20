@@ -142,7 +142,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
           <div className="flex items-center justify-between text-xs mb-2">
             <span className="text-slate-500">Maintenance:</span>
             <span className="font-semibold text-slate-700">
-              {property.maintenanceFee ? `${property.maintenanceFee} €/mo` : 'See details'}
+              {property.maintenanceFee ? `${property.maintenanceFee} €/mo` : 'N/A'}
             </span>
           </div>
 
