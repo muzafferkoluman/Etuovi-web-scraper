@@ -144,6 +144,7 @@ export const AppContent: React.FC = () => {
         notifications={notifications}
         unreadCount={unreadCount}
         compareCount={comparedProperties.length}
+        favoritesCount={favoriteIds.length}
         onMarkRead={handleMarkRead}
         onMarkAllRead={handleMarkAllRead}
         onOpenNotificationProperty={(propId) => {

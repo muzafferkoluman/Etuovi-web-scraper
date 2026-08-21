@@ -2,20 +2,14 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Search,
-  BookmarkCheck,
   Heart,
-  Scale,
   Bell,
   Sparkles,
-  LogOut,
   CheckCheck,
   TrendingDown,
   Building,
-  Terminal,
-  Activity,
-  ChevronDown
+  LayoutDashboard
 } from "lucide-react";
-import { useAuth } from "../contexts/AuthContext";
 import { cn } from "../lib/utils";
 import { AppNotification } from "@koti-scout/shared";
 
@@ -23,6 +17,7 @@ export interface NavbarProps {
   notifications?: AppNotification[];
   unreadCount?: number;
   compareCount?: number;
+  favoritesCount?: number;
   onMarkRead?: (id: string) => void;
   onMarkAllRead?: () => void;
   onOpenNotificationProperty?: (propertyId: string) => void;
@@ -32,27 +27,24 @@ export const Navbar: React.FC<NavbarProps> = ({
   notifications = [],
   unreadCount = 0,
   compareCount = 0,
+  favoritesCount = 0,
   onMarkRead = () => {},
   onMarkAllRead = () => {},
   onOpenNotificationProperty
 }) => {
   const location = useLocation();
-  const { user, signOut } = useAuth();
   const [showNotifMenu, setShowNotifMenu] = useState(false);
-  const [showUserMenu, setShowUserMenu] = useState(false);
 
+  // Simplified Clean Menu Items: 3 essential tabs
   const navItems = [
-    { path: "/", label: "Dashboard", icon: Sparkles },
-    { path: "/search", label: "Explore", icon: Search },
-    { path: "/saved-searches", label: "Saved Searches", icon: BookmarkCheck },
-    { path: "/favorites", label: "Favorites", icon: Heart },
-    {
-      path: "/compare",
-      label: "Compare",
-      icon: Scale,
-      badge: compareCount > 0 ? compareCount : undefined
-    },
-    { path: "/dev", label: "Dev Radar", icon: Terminal }
+    { path: "/", label: "Dashboard", icon: LayoutDashboard },
+    { path: "/search", label: "Explore Properties", icon: Search },
+    { 
+      path: "/favorites", 
+      label: "Favorites", 
+      icon: Heart, 
+      badge: favoritesCount > 0 ? favoritesCount : undefined 
+    }
   ];
 
   return (
@@ -78,13 +70,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </span>
               </div>
               <p className="text-[10px] text-slate-400 font-medium hidden sm:block">
-                AI Finnish Real Estate Intelligence & Radar
+                Lina&apos;s Property Intelligence Radar
               </p>
             </div>
           </Link>
 
-          {/* Desktop Navigation Bar Links */}
-          <nav className="hidden md:flex items-center gap-1.5 bg-slate-900/60 p-1.5 rounded-2xl border border-slate-800/80 backdrop-blur-md">
+          {/* Simplified Desktop Navigation Bar */}
+          <nav className="hidden md:flex items-center gap-2 bg-slate-900/60 p-1.5 rounded-2xl border border-slate-800/80 backdrop-blur-md">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive =
@@ -97,7 +89,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   key={item.path}
                   to={item.path}
                   className={cn(
-                    "flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all relative",
+                    "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all relative",
                     isActive
                       ? "bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm"
                       : "text-slate-300 hover:text-white hover:bg-slate-800/60 border border-transparent"
@@ -115,15 +107,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* Right Action Controls: Live Status, Bell, Profile */}
+          {/* Right Action Controls: Live Status, Bell, Lina Profile */}
           <div className="flex items-center gap-3">
             
-            {/* Live Feed Pill */}
-            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs font-medium text-slate-300">
-              <Activity className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-              <span>EET (Helsinki)</span>
-            </div>
-
             {/* Notification Bell Dropdown */}
             <div className="relative">
               <button
@@ -165,7 +151,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <div className="max-h-80 overflow-y-auto divide-y divide-slate-800/60">
                     {notifications.length === 0 ? (
                       <div className="p-6 text-center text-xs text-slate-400">
-                        No active notifications. Perodic searches will display live alerts here.
+                        No active notifications yet. Price drops and radar matches will appear here.
                       </div>
                     ) : (
                       notifications.slice(0, 6).map((n) => (
@@ -224,17 +210,17 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             {/* Dedicated Lina Profile Pill */}
-            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs font-bold text-slate-200 shadow-sm">
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs font-bold text-slate-200 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-white font-mono tracking-wide">Lina</span>
-              <span className="text-emerald-400/80 font-semibold text-[11px]">• Radar Active</span>
+              <span className="text-emerald-400/80 font-semibold text-[11px] hidden sm:inline">• Radar Active</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Mobile Navigation Bar */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-nav px-2 py-2 flex justify-around items-center border-t border-slate-800">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-nav px-3 py-2 flex justify-around items-center border-t border-slate-800">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive =
@@ -247,7 +233,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               key={item.path}
               to={item.path}
               className={cn(
-                "flex flex-col items-center py-1 px-3 rounded-xl text-[10px] font-bold transition-all",
+                "flex flex-col items-center py-1 px-4 rounded-xl text-[10px] font-bold transition-all",
                 isActive
                   ? "text-emerald-400 bg-emerald-500/10 border border-emerald-500/30"
                   : "text-slate-400 hover:text-slate-200"
