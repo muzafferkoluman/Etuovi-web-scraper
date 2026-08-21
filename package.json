@@ -1,7 +1,7 @@
 {
   "name": "koti-scout",
   "version": "1.0.1",
-  "description": "KotiScout \u2014 AI Assisted Finnish Property Finder",
+  "description": "KotiScout — AI Assisted Finnish Property Finder",
   "private": true,
   "workspaces": [
     "packages/*",
@@ -29,6 +29,14 @@
     "vitest": "^2.1.8"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.112.2"
+    "@supabase/supabase-js": "^2.112.2",
+    "@tanstack/react-query": "^5.101.4",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.33.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.2",
+    "tailwind-merge": "^3.6.0",
+    "zod": "^4.4.3"
   }
 }
