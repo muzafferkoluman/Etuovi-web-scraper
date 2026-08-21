@@ -1,9 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "npm run build --workspace=@koti-scout/web",
+  "installCommand": "npm install --legacy-peer-deps",
+  "buildCommand": "cd apps/web && npx vite build",
   "outputDirectory": "apps/web/dist",
-  "installCommand": "npm install",
-  "framework": "vite",
   "rewrites": [
     {
       "source": "/(.*)",
