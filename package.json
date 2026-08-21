@@ -1,6 +1,6 @@
 {
   "name": "koti-scout",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "KotiScout \u2014 AI Assisted Finnish Property Finder",
   "private": true,
   "workspaces": [
