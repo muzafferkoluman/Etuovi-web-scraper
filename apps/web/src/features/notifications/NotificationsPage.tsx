@@ -22,8 +22,8 @@ export const NotificationsPage: React.FC<NotificationsPageProps> = ({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">Notification Center</h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <h1 className="text-2xl font-black text-white tracking-tight">Notification Center</h1>
+          <p className="text-xs text-slate-400 mt-0.5">
             Real-time feed of detected price cuts, new listings matching your criteria, and score milestones.
           </p>
         </div>
@@ -37,15 +37,15 @@ export const NotificationsPage: React.FC<NotificationsPageProps> = ({
       </div>
 
       {notifications.length === 0 ? (
-        <div className="bg-white p-12 rounded-2xl border border-slate-200 text-center max-w-md mx-auto shadow-sm space-y-3">
+        <div className="bg-slate-900/90 p-12 rounded-2xl border border-slate-800 text-center max-w-md mx-auto shadow-sm space-y-3">
           <Bell className="w-10 h-10 text-slate-300 mx-auto" />
-          <h3 className="text-base font-bold text-slate-900">No notifications yet</h3>
-          <p className="text-xs text-slate-500">
+          <h3 className="text-base font-bold text-white">No notifications yet</h3>
+          <p className="text-xs text-slate-400">
             When automated searches detect price drops or new properties, alerts will appear here.
           </p>
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-slate-200 divide-y divide-slate-100 overflow-hidden shadow-sm">
+        <div className="bg-slate-900/90 rounded-2xl border border-slate-800 divide-y divide-slate-100 overflow-hidden shadow-sm">
           {notifications.map((n) => {
             const timeStr = new Date(n.createdAt).toLocaleString('fi-FI', {
               timeZone: 'Europe/Helsinki'
@@ -58,7 +58,7 @@ export const NotificationsPage: React.FC<NotificationsPageProps> = ({
                   if (!n.read) onMarkRead(n.id);
                   if (n.propertyId && onOpenProperty) onOpenProperty(n.propertyId);
                 }}
-                className={`p-4 sm:p-5 flex items-start gap-4 transition-colors cursor-pointer hover:bg-slate-50 ${
+                className={`p-4 sm:p-5 flex items-start gap-4 transition-colors cursor-pointer hover:bg-slate-950/80 ${
                   !n.read ? 'bg-emerald-50/30' : ''
                 }`}
               >
@@ -75,7 +75,7 @@ export const NotificationsPage: React.FC<NotificationsPageProps> = ({
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-xs sm:text-sm font-bold text-slate-900 truncate">
+                    <h3 className="text-xs sm:text-sm font-bold text-white truncate">
                       {n.title}
                     </h3>
                     <span className="text-[11px] text-slate-400 flex-shrink-0">{timeStr}</span>

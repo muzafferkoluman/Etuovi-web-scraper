@@ -49,10 +49,10 @@ export const SearchPage: React.FC<SearchPageProps> = ({
       {/* Header bar with Save Search action */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-2xl font-black text-white tracking-tight">
             Finnish Property Search & Intelligence
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Search active listings with automated Match Scoring (0-100), Deal Finder metrics, and price drop detection.
           </p>
         </div>
@@ -97,7 +97,7 @@ export const SearchPage: React.FC<SearchPageProps> = ({
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 py-12">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="bg-white rounded-2xl p-4 border border-slate-200 animate-pulse space-y-3">
+                <div key={i} className="bg-slate-900/90 rounded-2xl p-4 border border-slate-800 animate-pulse space-y-3">
                   <div className="aspect-[16/10] bg-slate-200 rounded-xl" />
                   <div className="h-4 bg-slate-200 rounded w-2/3" />
                   <div className="h-3 bg-slate-100 rounded w-1/2" />
@@ -107,20 +107,20 @@ export const SearchPage: React.FC<SearchPageProps> = ({
             </div>
           ) : properties.length === 0 ? (
             /* High quality Empty State */
-            <div className="bg-white p-8 sm:p-12 rounded-2xl border border-slate-200 text-center max-w-lg mx-auto my-8 space-y-4 shadow-sm">
+            <div className="bg-slate-900/90 p-8 sm:p-12 rounded-2xl border border-slate-800 text-center max-w-lg mx-auto my-8 space-y-4 shadow-sm">
               <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto border border-amber-200">
                 <AlertCircle className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900">
+                <h3 className="text-base font-bold text-white">
                   No properties match these filters
                 </h3>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-slate-400 mt-1">
                   Try adjusting your criteria to discover properties across Finnish regions:
                 </p>
               </div>
 
-              <div className="text-left bg-slate-50 p-4 rounded-xl text-xs space-y-2 text-slate-700 border border-slate-100">
+              <div className="text-left bg-slate-950/80 p-4 rounded-xl text-xs space-y-2 text-slate-200 border border-slate-800">
                 <div className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                   <span>Increasing maximum budget or price</span>

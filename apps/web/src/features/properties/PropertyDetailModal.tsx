@@ -60,19 +60,19 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
     <Modal isOpen={isOpen} onClose={onClose} maxWidth="4xl">
       <div className="space-y-6">
         {/* Header Title & Location */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
           <div>
             <div className="flex items-center gap-1.5 text-xs text-slate-500 font-semibold uppercase tracking-wider mb-1">
               <MapPin className="w-3.5 h-3.5 text-emerald-600" />
               <span>{property.district || property.city}, {property.city}</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black text-slate-900">{property.address}</h2>
+            <h2 className="text-xl sm:text-2xl font-black text-white">{property.address}</h2>
             <p className="text-xs text-slate-500 mt-0.5">{property.title}</p>
           </div>
 
           <div className="flex items-center gap-3">
             <div className="text-right">
-              <div className="text-2xl sm:text-3xl font-black text-slate-950">
+              <div className="text-2xl sm:text-3xl font-black text-white font-mono">
                 {formatEuro(property.price)}
               </div>
               <div className="text-xs font-semibold text-slate-500">
@@ -136,8 +136,8 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
         </div>
 
         {/* Property Specs Table */}
-        <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm">
-          <h3 className="text-sm font-bold text-slate-900 mb-4 flex items-center justify-between">
+        <div className="p-5 bg-slate-950/80 rounded-2xl border border-slate-800 shadow-sm">
+          <h3 className="text-sm font-bold text-white mb-4 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <Building className="w-4 h-4 text-emerald-600" />
               <span>Property Specifications</span>
@@ -152,19 +152,19 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-3 gap-x-4 text-xs">
             <div>
               <span className="text-slate-500 block">Property Type</span>
-              <span className="font-semibold text-slate-800">{property.propertyType}</span>
+              <span className="font-semibold text-slate-200">{property.propertyType}</span>
             </div>
             <div>
               <span className="text-slate-500 block">Living Area</span>
-              <span className="font-semibold text-slate-800">{property.area} m²</span>
+              <span className="font-semibold text-slate-200">{property.area} m²</span>
             </div>
             <div>
               <span className="text-slate-500 block">Rooms</span>
-              <span className="font-semibold text-slate-800">{property.rooms} ({property.bedrooms || 1} bed)</span>
+              <span className="font-semibold text-slate-200">{property.rooms} ({property.bedrooms || 1} bed)</span>
             </div>
             <div>
               <span className="text-slate-500 block">Build Year</span>
-              <span className="font-semibold text-slate-800">{property.buildYear || "—"}</span>
+              <span className="font-semibold text-slate-200">{property.buildYear || "—"}</span>
             </div>
             <div>
               <span className="text-slate-500 block">Monthly Maintenance</span>
@@ -174,45 +174,45 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
             </div>
             <div>
               <span className="text-slate-500 block">Floor</span>
-              <span className="font-semibold text-slate-800">
+              <span className="font-semibold text-slate-200">
                 {property.floor ? `${property.floor} / ${property.totalFloors || "—"}` : "—"}
               </span>
             </div>
             <div>
               <span className="text-slate-500 block">Energy Class</span>
-              <span className="font-semibold text-slate-800">{property.energyClass || "E2018"}</span>
+              <span className="font-semibold text-slate-200">{property.energyClass || "E2018"}</span>
             </div>
             <div>
               <span className="text-slate-500 block">Sauna</span>
-              <span className="font-semibold text-slate-800">{property.hasSauna ? "Yes (Oma sauna)" : "No"}</span>
+              <span className="font-semibold text-slate-200">{property.hasSauna ? "Yes (Oma sauna)" : "No"}</span>
             </div>
             <div>
               <span className="text-slate-500 block">Balcony</span>
-              <span className="font-semibold text-slate-800">{property.hasBalcony ? "Yes (Parveke)" : "No"}</span>
+              <span className="font-semibold text-slate-200">{property.hasBalcony ? "Yes (Parveke)" : "No"}</span>
             </div>
             <div>
               <span className="text-slate-500 block">Elevator</span>
-              <span className="font-semibold text-slate-800">{property.hasElevator ? "Yes (Hissi)" : "No"}</span>
+              <span className="font-semibold text-slate-200">{property.hasElevator ? "Yes (Hissi)" : "No"}</span>
             </div>
             <div>
               <span className="text-slate-500 block">Postal Code</span>
-              <span className="font-semibold text-slate-800">{property.postalCode ? `${property.postalCode} ${property.city}` : property.city}</span>
+              <span className="font-semibold text-slate-200">{property.postalCode ? `${property.postalCode} ${property.city}` : property.city}</span>
             </div>
             <div>
               <span className="text-slate-500 block">Provider</span>
-              <span className="font-semibold text-slate-800">{property.provider}</span>
+              <span className="font-semibold text-slate-200">{property.provider}</span>
             </div>
           </div>
         </div>
 
         {/* Description */}
-        <div className="p-4 bg-slate-50 rounded-xl text-xs text-slate-700 leading-relaxed border border-slate-100">
-          <h4 className="font-bold text-slate-900 mb-1">Description</h4>
+        <div className="p-4 bg-slate-950/80 rounded-xl text-xs text-slate-300 leading-relaxed border border-slate-800">
+          <h4 className="font-bold text-white mb-1">Description</h4>
           <p>{property.description}</p>
         </div>
 
         {/* Footer Link & Close */}
-        <div className="flex items-center justify-between pt-4 border-t border-slate-200">
+        <div className="flex items-center justify-between pt-4 border-t border-slate-800">
           <a
             href={property.sourceUrl}
             target="_blank"
