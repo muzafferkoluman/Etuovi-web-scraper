@@ -93,19 +93,19 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
           </label>
           <div className="flex flex-wrap gap-1.5 max-h-44 overflow-y-auto pr-1">
             {availableDistricts.map((d) => {
-              const isSelected = (filters.districts || []).includes(d);
+              const isSelected = (filters.districts || []).includes(d.name);
               return (
                 <button
-                  key={d}
+                  key={d.name}
                   type="button"
-                  onClick={() => handleDistrictToggle(d)}
+                  onClick={() => handleDistrictToggle(d.name)}
                   className={`px-2.5 py-1 text-xs rounded-lg border transition-all ${
                     isSelected
                       ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold"
                       : "bg-slate-950/80 text-slate-400 border-slate-800 hover:bg-slate-800 hover:text-slate-200"
                   }`}
                 >
-                  {d}
+                  {d.name}
                 </button>
               );
             })}
