@@ -8,35 +8,42 @@
     --foreground: 222.2 84% 4.9%;
     --card: 0 0% 100%;
     --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 160 84% 39%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 160 84% 39%;
+    --primary: 160 84% 39%;
     --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
   }
 }
 
 body {
   font-family: "Inter", system-ui, -apple-system, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html:not(.dark) body {
   color: #0f172a;
+  background-color: #f8fafc;
+  background-image: radial-gradient(at 50% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+                    radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.04) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+html.dark body {
+  color: #f8fafc;
   background-color: #0b0f17;
   background-image: radial-gradient(at 50% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
                     radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.05) 0px, transparent 50%);
   background-attachment: fixed;
 }
 
-/* Sleek minimalist scrollbar */
+/* Minimalist scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -44,48 +51,47 @@ body {
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-::-webkit-scrollbar-thumb {
+html.dark ::-webkit-scrollbar-thumb {
   background: #334155;
   border-radius: 9999px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+html:not(.dark) ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
 }
 
 /* Glassmorphism & Soft elevations */
-.glass-panel {
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.glass-nav {
+html.dark .glass-nav {
   background: rgba(11, 15, 23, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(16, 185, 129, 0.15);
 }
 
+html:not(.dark) .glass-nav {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.9);
+}
+
+/* Hero mesh */
+html.dark .hero-mesh {
+  background: radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
+              radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.1) 0%, transparent 40%),
+              linear-gradient(180deg, #0b0f17 0%, #0f172a 100%);
+}
+
+html:not(.dark) .hero-mesh {
+  background: radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+              radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.06) 0%, transparent 40%),
+              linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
+}
+
 .nordic-card {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.02);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .nordic-card:hover {
-  border-color: #cbd5e1;
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
-}
-
-.glow-emerald {
-  box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.3);
-}
-
-.hero-mesh {
-  background: radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
-              radial-gradient(circle at 80% 80%, rgba(56, 189, 248, 0.1) 0%, transparent 40%),
-              linear-gradient(180deg, #0b0f17 0%, #0f172a 100%);
 }

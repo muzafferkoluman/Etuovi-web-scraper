@@ -11,10 +11,13 @@ import {
   LayoutDashboard,
   Globe,
   ChevronDown,
+  Sun,
+  Moon,
   Check
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { AppNotification } from "@koti-scout/shared";
+import { useTheme } from "../contexts/ThemeContext";
 import { useTranslation, SUPPORTED_LANGUAGES, SupportedLanguage } from "../contexts/LanguageContext";
 
 export interface NavbarProps {
@@ -38,6 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const location = useLocation();
   const { t, language, setLanguage, currentLanguageOption } = useTranslation();
+  const { actualTheme, toggleTheme } = useTheme();
   const [showNotifMenu, setShowNotifMenu] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
 
@@ -67,7 +71,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-lg sm:text-xl font-black tracking-tight text-white font-mono">
+                <span className="text-lg sm:text-xl font-black tracking-tight text-slate-900 dark:text-white font-mono">
                   KOTI<span className="text-emerald-400">SCOUT</span>
                 </span>
                 <span className="px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-full flex items-center gap-1">
@@ -82,7 +86,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </Link>
 
           {/* Desktop Navigation Bar */}
-          <nav className="hidden md:flex items-center gap-2 bg-slate-900/60 p-1.5 rounded-2xl border border-slate-800/80 backdrop-blur-md">
+          <nav className="hidden md:flex items-center gap-2 bg-slate-100/80 dark:bg-slate-900/60 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800/80 backdrop-blur-md">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive =
@@ -97,8 +101,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className={cn(
                     "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all relative",
                     isActive
-                      ? "bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm"
-                      : "text-slate-300 hover:text-white hover:bg-slate-800/60 border border-transparent"
+                      ? "bg-emerald-500/15 dark:bg-gradient-to-r dark:from-emerald-500/20 dark:to-teal-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 dark:border-emerald-500/40 shadow-sm"
+                      : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-slate-800/60 border border-transparent"
                   )}
                 >
                   <Icon className={cn("w-4 h-4", isActive ? "text-emerald-400" : "text-slate-400")} />
@@ -116,12 +120,27 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Right Action Controls: Language Switcher, Notifications Bell, Lina Profile */}
           <div className="flex items-center gap-2.5">
             
+            {/* Theme Toggle Button (Light/Dark Mode) */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900/80 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-800 transition-all focus:outline-none shadow-xs"
+              title={actualTheme === "dark" ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              aria-label="Toggle theme"
+            >
+              {actualTheme === "dark" ? (
+                <Sun className="w-4 h-4 text-amber-400" />
+              ) : (
+                <Moon className="w-4 h-4 text-slate-700" />
+              )}
+            </button>
+
             {/* Language Selector Dropdown */}
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setShowLangMenu(!showLangMenu)}
-                className="flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-slate-900/80 text-slate-200 hover:text-white border border-slate-800 hover:border-slate-700 transition-all text-xs font-bold"
+                className="flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900/80 text-slate-700 dark:text-slate-200 dark:hover:text-white border border-slate-200 dark:border-slate-800 transition-all text-xs font-bold"
                 aria-label="Change language"
               >
                 <span className="text-sm">{currentLanguageOption.flag}</span>
@@ -130,7 +149,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
 
               {showLangMenu && (
-                <div className="absolute right-0 mt-2 w-44 bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 p-1.5">
+                <div className="absolute right-0 mt-2 w-44 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 p-1.5">
                   <div className="px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-slate-400 border-b border-slate-800 mb-1 flex items-center gap-1.5">
                     <Globe className="w-3 h-3 text-emerald-400" />
                     <span>Language</span>
@@ -166,7 +185,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <button
                 type="button"
                 onClick={() => setShowNotifMenu(!showNotifMenu)}
-                className="relative p-2.5 rounded-xl bg-slate-900/80 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition-all focus:outline-none"
+                className="relative p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 dark:hover:text-white border border-slate-200 dark:border-slate-800 transition-all focus:outline-none"
                 aria-label="Notifications"
               >
                 <Bell className="w-4 h-4" />
@@ -263,7 +282,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Dedicated Lina Profile Pill */}
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs font-bold text-slate-200 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-white font-mono tracking-wide">Lina</span>
+              <span className="text-slate-900 dark:text-white font-mono tracking-wide">Lina</span>
               <span className="text-emerald-400/80 font-semibold text-[11px] hidden sm:inline">• {t("nav.radarActive")}</span>
             </div>
           </div>

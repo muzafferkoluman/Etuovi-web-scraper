@@ -70,7 +70,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
     <div className="space-y-8 pb-10">
       
       {/* 1. Executive Welcome & Command Center Header */}
-      <div className="hero-mesh p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-2xl relative overflow-hidden">
+      <div className="hero-mesh p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -85,10 +85,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl font-black text-white font-mono tracking-tight">
+            <h1 className="text-2xl sm:text-4xl font-black text-slate-900 dark:text-white font-mono tracking-tight">
               {t("dash.welcome")}
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 mt-1 font-medium max-w-xl">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1 font-medium max-w-xl">
               {t("dash.welcomeSub")}
             </p>
           </div>
@@ -110,7 +110,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               <Button
                 variant="outline"
                 size="md"
-                className="border-slate-700 bg-slate-900/80 text-slate-200 hover:text-white hover:bg-slate-800 text-xs"
+                className="border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/80 text-slate-700 dark:text-slate-200 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 text-xs shadow-xs"
               >
                 <SlidersHorizontal className="w-3.5 h-3.5 mr-1.5 text-emerald-400" />
                 <span>{t("dash.manageRadars")}</span>
@@ -121,17 +121,17 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
         {/* 2. Primary KPI Executive Stats Bar */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-6 pt-6 border-t border-slate-800/80">
-          <div className="bg-slate-900/70 p-4 rounded-2xl border border-slate-800/80">
+          <div className="bg-white/80 dark:bg-slate-900/70 p-4 rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-xs">
             <div className="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
               <Building className="w-3.5 h-3.5 text-emerald-400" />
               <span>{t("dash.statListings")}</span>
             </div>
-            <div className="text-xl sm:text-2xl font-black mt-1 text-white font-mono">
+            <div className="text-xl sm:text-2xl font-black mt-1 text-slate-900 dark:text-white font-mono">
               {stats?.checkedToday ?? properties.length} <span className="text-xs font-normal text-slate-400">{t("dash.unitListings")}</span>
             </div>
           </div>
 
-          <div className="bg-slate-900/70 p-4 rounded-2xl border border-slate-800/80">
+          <div className="bg-white/80 dark:bg-slate-900/70 p-4 rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-xs">
             <div className="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
               <TrendingDown className="w-3.5 h-3.5 text-rose-400" />
               <span>{t("dash.statDrops")}</span>
@@ -141,7 +141,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             </div>
           </div>
 
-          <div className="bg-slate-900/70 p-4 rounded-2xl border border-slate-800/80">
+          <div className="bg-white/80 dark:bg-slate-900/70 p-4 rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-xs">
             <div className="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
               <Search className="w-3.5 h-3.5 text-amber-400" />
               <span>{t("dash.statRadars")}</span>
@@ -151,28 +151,28 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             </div>
           </div>
 
-          <div className="bg-slate-900/70 p-4 rounded-2xl border border-slate-800/80">
+          <div className="bg-white/80 dark:bg-slate-900/70 p-4 rounded-2xl border border-slate-200 dark:border-slate-800/80 shadow-xs">
             <div className="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
               <Heart className="w-3.5 h-3.5 text-rose-500" />
               <span>{t("dash.statFavorites")}</span>
             </div>
-            <div className="text-xl sm:text-2xl font-black mt-1 text-white font-mono">
+            <div className="text-xl sm:text-2xl font-black mt-1 text-slate-900 dark:text-white font-mono">
               {favorites.length} <span className="text-xs font-normal text-slate-400">{t("dash.unitSaved")}</span>
             </div>
           </div>
         </div>
 
         {/* 3. Fast City Jump Bar */}
-        <form onSubmit={handleHeroSearch} className="mt-6 p-2 bg-slate-900/90 border border-slate-800 rounded-2xl flex flex-col sm:flex-row items-center gap-2">
+        <form onSubmit={handleHeroSearch} className="mt-6 p-2 bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl flex flex-col sm:flex-row items-center gap-2 shadow-xs">
           <div className="flex-1 flex items-center gap-2 px-3 w-full">
             <MapPin className="w-4 h-4 text-emerald-400 flex-shrink-0" />
             <select
               value={heroCity}
               onChange={(e) => setHeroCity(e.target.value)}
-              className="w-full bg-transparent text-xs font-bold text-white focus:outline-none cursor-pointer"
+              className="w-full bg-transparent text-xs font-bold text-slate-900 dark:text-white focus:outline-none cursor-pointer"
             >
               {FINNISH_CITIES.map((city) => (
-                <option key={city} value={city} className="bg-slate-900 text-white">
+                <option key={city} value={city} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
                   {city} {t("dash.citySelectSuffix")}
                 </option>
               ))}
@@ -219,7 +219,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
                   <Flame className="w-4 h-4" />
                 </div>
-                <h2 className="text-lg font-black text-white">{t("dash.topBargains")}</h2>
+                <h2 className="text-lg font-black text-slate-900 dark:text-white">{t("dash.topBargains")}</h2>
               </div>
               <Link to="/search" className="text-xs font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
                 <span>{t("dash.viewAll")} ({properties.length})</span>
@@ -250,7 +250,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   <div className="p-1.5 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20">
                     <TrendingDown className="w-4 h-4" />
                   </div>
-                  <h2 className="text-lg font-black text-white">{t("dash.priceDrops")}</h2>
+                  <h2 className="text-lg font-black text-slate-900 dark:text-white">{t("dash.priceDrops")}</h2>
                 </div>
                 <Link to="/search" className="text-xs font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
                   <span>{t("dash.viewAllDrops")}</span>
@@ -279,11 +279,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         <div className="lg:col-span-4 space-y-6">
           
           {/* Active Saved Search Radars Widget */}
-          <div className="bg-slate-900/80 p-5 rounded-2xl border border-slate-800 shadow-xl space-y-4">
+          <div className="bg-white dark:bg-slate-900/80 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center gap-2">
                 <Search className="w-4 h-4 text-emerald-400" />
-                <h3 className="text-sm font-bold text-white">{t("dash.activeRadars")}</h3>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">{t("dash.activeRadars")}</h3>
               </div>
               <Link to="/saved-searches" className="text-xs text-emerald-400 hover:underline font-semibold">
                 {t("dash.manage")}
@@ -299,9 +299,9 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 {savedSearches.slice(0, 4).map((search) => {
                   const isRunning = runningSearchId === search.id;
                   return (
-                    <div key={search.id} className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800/80 hover:border-slate-700 transition-all space-y-2">
+                    <div key={search.id} className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700 transition-all space-y-2">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-white truncate max-w-[140px]">
+                        <span className="text-xs font-bold text-slate-900 dark:text-white truncate max-w-[140px]">
                           {search.name}
                         </span>
                         <span className="text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
@@ -339,7 +339,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
           {/* Quick Compare Dock Widget */}
           {comparedProperties.length > 0 && (
-            <div className="bg-slate-900/90 p-5 rounded-2xl border border-emerald-500/30 shadow-xl space-y-3">
+            <div className="bg-white dark:bg-slate-900/90 p-5 rounded-2xl border border-emerald-500/30 shadow-sm space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-white text-xs font-bold">
                   <Scale className="w-4 h-4 text-emerald-400" />
@@ -362,7 +362,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           )}
 
           {/* Lina Quick Security & System Note */}
-          <div className="p-4 rounded-2xl bg-slate-900/50 border border-slate-800/80 text-xs text-slate-400 space-y-1.5">
+          <div className="p-4 rounded-2xl bg-slate-100/70 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800/80 text-xs text-slate-600 dark:text-slate-400 space-y-1.5">
             <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
               <ShieldCheck className="w-4 h-4" />
               <span>{t("dash.personalRadar")}</span>

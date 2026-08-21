@@ -24,7 +24,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <div className="nordic-card rounded-2xl overflow-hidden flex flex-col group bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition-all shadow-lg">
+    <div className="nordic-card rounded-2xl overflow-hidden flex flex-col group bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-all shadow-sm">
       {/* Thumbnail & Badges */}
       <div className="relative aspect-[16/10] bg-slate-950 overflow-hidden cursor-pointer" onClick={() => onViewDetails?.(property)}>
         <img
@@ -109,33 +109,33 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
           </div>
 
           <h3
-            className="text-sm font-bold text-white line-clamp-1 hover:text-emerald-400 cursor-pointer transition-colors"
+            className="text-sm font-bold text-slate-900 dark:text-white line-clamp-1 hover:text-emerald-600 dark:hover:text-emerald-400 cursor-pointer transition-colors"
             onClick={() => onViewDetails?.(property)}
           >
             {property.address}
           </h3>
 
-          <p className="text-xs text-slate-400 line-clamp-2 mt-1 mb-3">
+          <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 mt-1 mb-3">
             {property.title}
           </p>
 
           {/* Key Specs Grid */}
-          <div className="grid grid-cols-2 gap-y-1.5 gap-x-2 py-2.5 my-2 border-y border-slate-800 text-xs">
+          <div className="grid grid-cols-2 gap-y-1.5 gap-x-2 py-2.5 my-2 border-y border-slate-100 dark:border-slate-800 text-xs">
             <div className="flex justify-between">
               <span className="text-slate-400">Area:</span>
-              <span className="font-semibold text-slate-200">{property.area} m²</span>
+              <span className="font-semibold text-slate-800 dark:text-slate-200">{property.area} m²</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-400">{t("prop.rooms")}:</span>
-              <span className="font-semibold text-slate-200">{property.rooms} rooms</span>
+              <span className="font-semibold text-slate-800 dark:text-slate-200">{property.rooms} rooms</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-400">Price/m²:</span>
-              <span className="font-semibold text-slate-200">{formatSqmPrice(property.pricePerSquareMeter)}</span>
+              <span className="font-semibold text-slate-800 dark:text-slate-200">{formatSqmPrice(property.pricePerSquareMeter)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-400">{t("prop.built")}:</span>
-              <span className="font-semibold text-slate-200">{property.buildYear || "—"}</span>
+              <span className="font-semibold text-slate-800 dark:text-slate-200">{property.buildYear || "—"}</span>
             </div>
           </div>
 
@@ -155,14 +155,14 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
         </div>
 
         {/* Card Footer Actions */}
-        <div className="pt-2 mt-auto border-t border-slate-800 flex items-center justify-between gap-2">
+        <div className="pt-2 mt-auto border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
           <button
             type="button"
             onClick={() => onToggleCompare?.(property)}
             className={`flex items-center gap-1 text-xs font-medium px-2.5 py-1.5 rounded-lg border transition-colors ${
               isCompared
                 ? "bg-emerald-950/60 text-emerald-400 border-emerald-500/40"
-                : "text-slate-400 border-slate-800 hover:bg-slate-800 hover:text-slate-200"
+                : "text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
             <Scale className="w-3.5 h-3.5" />
@@ -172,7 +172,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
           <button
             type="button"
             onClick={() => onViewDetails?.(property)}
-            className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500 text-emerald-400 hover:text-slate-950 border border-emerald-500/30 transition-all ml-auto"
+            className="flex items-center gap-1 text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-500/15 hover:bg-emerald-500 text-emerald-700 dark:text-emerald-400 hover:text-white dark:hover:text-slate-950 border border-emerald-500/30 transition-all ml-auto"
           >
             <span>View property</span>
           </button>
