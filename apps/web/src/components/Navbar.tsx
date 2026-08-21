@@ -223,50 +223,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
 
-            {/* User Profile Pill */}
-            <div className="hidden sm:block">
-              {user ? (
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="flex items-center gap-2 p-1.5 pl-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition-colors"
-                  >
-                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                    <span className="text-xs font-bold text-slate-200 max-w-[100px] truncate">
-                      {user.fullName || user.email.split("@")[0]}
-                    </span>
-                    <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-                  </button>
-
-                  {showUserMenu && (
-                    <div className="absolute right-0 mt-2 w-48 bg-slate-900 rounded-xl shadow-xl border border-slate-800 overflow-hidden z-50">
-                      <div className="p-3 border-b border-slate-800 text-xs">
-                        <p className="text-slate-400">Signed in as</p>
-                        <p className="font-bold text-white truncate">{user.email}</p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          signOut();
-                          setShowUserMenu(false);
-                        }}
-                        className="w-full text-left p-3 text-xs font-bold text-rose-400 hover:bg-slate-800 flex items-center gap-2 transition-colors"
-                      >
-                        <LogOut className="w-4 h-4" />
-                        <span>Sign Out</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <Link
-                  to="/login"
-                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs transition-all shadow-md shadow-emerald-500/20"
-                >
-                  Sign In
-                </Link>
-              )}
+            {/* Dedicated Lina Profile Pill */}
+            <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs font-bold text-slate-200 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-white font-mono tracking-wide">Lina</span>
+              <span className="text-emerald-400/80 font-semibold text-[11px]">• Radar Active</span>
             </div>
           </div>
         </div>

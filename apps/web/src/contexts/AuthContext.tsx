@@ -32,9 +32,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } catch {}
     }
     return {
-      id: 'user-demo-01',
-      email: 'demo@kotiscout.fi',
-      fullName: 'Demo Scout'
+      id: 'user-lina-01',
+      email: 'lina@kotiscout.fi',
+      fullName: 'Lina'
     };
   });
   const [accessToken, setAccessToken] = useState<string | null>(() => {
@@ -114,9 +114,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signInWithDemoUser = () => {
     const demo: AuthUser = {
-      id: 'user-demo-01',
-      email: 'demo@kotiscout.fi',
-      fullName: 'Demo Scout'
+      id: 'user-lina-01',
+      email: 'lina@kotiscout.fi',
+      fullName: 'Lina'
     };
     setUser(demo);
     setAccessToken('demo-token-123');
