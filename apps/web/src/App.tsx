@@ -1,6 +1,6 @@
 import { LanguageProvider } from "./contexts/LanguageContext";
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   Property,
@@ -30,6 +30,23 @@ import { CreateSearchModal } from './features/saved-searches/CreateSearchModal';
 export const AppContent: React.FC = () => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Sync filters from URL query parameters (e.g. from Dashboard city jump)
+  useEffect(() => {
+    if (location.pathname === "/search") {
+      const params = new URLSearchParams(location.search);
+      const cityParam = params.get("cities");
+      const keywordParam = params.get("keyword");
+      if (cityParam || keywordParam) {
+        setFilters((prev) => ({
+          ...prev,
+          cities: cityParam ? [cityParam] : prev.cities,
+          keyword: keywordParam || prev.keyword
+        }));
+      }
+    }
+  }, [location.pathname, location.search]);
 
   // Search filter state
   const [filters, setFilters] = useState<PropertyFilters>({

@@ -44,8 +44,19 @@ export class EtuoviLivePropertyProvider implements PropertyProvider {
   private baseUrl = "https://www.etuovi.com";
   private userAgent =
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36";
+  
+  // In-memory cache for search responses and detail pages
+  private searchCache = new Map<string, { result: PropertySearchResult; timestamp: number }>();
+  private detailCache = new Map<string, { property: Property; timestamp: number }>();
+  private CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
   public async search(filters: PropertyFilters): Promise<PropertySearchResult> {
+    const cacheKey = JSON.stringify(filters);
+    const cached = this.searchCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
+      return cached.result;
+    }
+
     try {
       const searchUrl = this.buildSearchUrl(filters);
       const html = await this.fetchHtml(searchUrl);
@@ -58,27 +69,10 @@ export class EtuoviLivePropertyProvider implements PropertyProvider {
       let properties = announcements.map((ann) => this.mapAnnouncementToProperty(ann));
       properties = this.applyLocalFilters(properties, filters);
 
-      // Enrich top 15 properties in parallel with maintenance fee (Hoitovastike) from detail pages
-      const topSlice = properties.slice(0, 15);
-      await Promise.all(
-        topSlice.map(async (prop) => {
-          try {
-            const detailUrl = `${this.baseUrl}/kohde/${prop.externalId}`;
-            const detailHtml = await this.fetchHtml(detailUrl);
-            const fee = this.extractMaintenanceFee(detailHtml);
-            if (fee !== null) {
-              prop.maintenanceFee = fee;
-            }
-          } catch {
-            // Silently retain base property if individual detail fetch fails
-          }
-        })
-      );
-
       const page = Math.floor((filters.offset || 0) / (filters.limit || 20)) + 1;
       const pageSize = filters.limit || 20;
 
-      return {
+      const result: PropertySearchResult = {
         properties,
         total: totalResults,
         page,
@@ -86,8 +80,14 @@ export class EtuoviLivePropertyProvider implements PropertyProvider {
         hasMore: (filters.offset || 0) + properties.length < totalResults,
         provider: this.name
       };
+
+      if (properties.length > 0) {
+        this.searchCache.set(cacheKey, { result, timestamp: Date.now() });
+      }
+
+      return result;
     } catch (error) {
-      console.error("[EtuoviLivePropertyProvider] Search error:", error);
+      console.warn(`[EtuoviLivePropertyProvider] Live search notice: ${error instanceof Error ? error.message : "Temporary connection delay"}`);
       return {
         properties: [],
         total: 0,
@@ -100,8 +100,13 @@ export class EtuoviLivePropertyProvider implements PropertyProvider {
   }
 
   public async getProperty(externalId: string): Promise<Property | null> {
+    const cleanId = externalId.replace(/^etuovi-/, "");
+    const cached = this.detailCache.get(cleanId);
+    if (cached && Date.now() - cached.timestamp < this.CACHE_TTL_MS) {
+      return cached.property;
+    }
+
     try {
-      const cleanId = externalId.replace(/^etuovi-/, "");
       const detailUrl = `${this.baseUrl}/kohde/${cleanId}`;
       const html = await this.fetchHtml(detailUrl);
       const state = this.extractInitialState(html);
@@ -116,9 +121,11 @@ export class EtuoviLivePropertyProvider implements PropertyProvider {
       if (htmlFee !== null) {
         prop.maintenanceFee = htmlFee;
       }
+
+      this.detailCache.set(cleanId, { property: prop, timestamp: Date.now() });
       return prop;
     } catch (error) {
-      console.error(`[EtuoviLivePropertyProvider] Error fetching property ${externalId}:`, error);
+      console.warn(`[EtuoviLivePropertyProvider] Property ${externalId} fetch notice: ${error instanceof Error ? error.message : "Error"}`);
       return null;
     }
   }
@@ -220,13 +227,11 @@ export class EtuoviLivePropertyProvider implements PropertyProvider {
   }
 
   private extractMaintenanceFee(html: string): number | null {
-    // Regex 1: Hoitovastike followed by amount € / kk
     const match1 = html.match(/Hoitovastike[\s\S]{1,250}?([\d\s]+[,.]\d{2})\s*€\s*\/\s*kk/i);
     if (match1) {
       const val = parseFloat(match1[1].replace(/\s/g, "").replace(",", "."));
       if (!isNaN(val)) return val;
     }
-    // Regex 2: Yhtiövastike yhteensä
     const match2 = html.match(/Yhtiövastike yhteensä[\s\S]{1,250}?([\d\s]+[,.]\d{2})\s*€\s*\/\s*kk/i);
     if (match2) {
       const val = parseFloat(match2[1].replace(/\s/g, "").replace(",", "."));

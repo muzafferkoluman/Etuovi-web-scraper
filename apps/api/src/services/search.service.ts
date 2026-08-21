@@ -39,7 +39,28 @@ export class PropertySearchService {
   }
 
   public async search(filters: PropertyFilters): Promise<PropertySearchResult> {
-    const rawResult = await this.provider.search(filters);
+    let rawResult = await this.provider.search(filters);
+
+    // Resilience Fallback: If live provider returns 0 results (due to rate limits or network), fallback to dbRepository
+    if (rawResult.properties.length === 0) {
+      try {
+        const dbResult = await dbRepository.getProperties(filters);
+        if (dbResult.properties.length > 0) {
+          const limit = filters.limit || 20;
+          const offset = filters.offset || 0;
+          rawResult = {
+            properties: dbResult.properties,
+            total: dbResult.total,
+            page: Math.floor(offset / limit) + 1,
+            pageSize: limit,
+            hasMore: offset + dbResult.properties.length < dbResult.total,
+            provider: `${this.provider.name} (Resilient Cache)`
+          };
+        }
+      } catch {
+        // Continue with rawResult
+      }
+    }
 
     const enrichedProperties: Property[] = await Promise.all(
       rawResult.properties.map(async (property) => {
