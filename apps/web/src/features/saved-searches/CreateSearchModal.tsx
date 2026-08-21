@@ -77,24 +77,24 @@ export const CreateSearchModal: React.FC<CreateSearchModalProps> = ({
     <Modal isOpen={isOpen} onClose={onClose} title="Save & Schedule Property Search" maxWidth="lg">
       <form onSubmit={handleSubmit} className="space-y-4 text-xs">
         <div>
-          <label className="font-bold text-slate-700 block mb-1">Search Name</label>
+          <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Search Name</label>
           <input
             type="text"
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+            className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none"
             placeholder="e.g. Helsinki Investment Opportunities"
           />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="font-bold text-slate-700 block mb-1">City</label>
+            <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">City</label>
             <select
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none"
+              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-slate-900 dark:text-white focus:outline-none"
             >
               {FINNISH_CITIES.map((c) => (
                 <option key={c} value={c}>
@@ -105,12 +105,12 @@ export const CreateSearchModal: React.FC<CreateSearchModalProps> = ({
           </div>
 
           <div>
-            <label className="font-bold text-slate-700 block mb-1">Max Price (€)</label>
+            <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Max Price (€)</label>
             <input
               type="number"
               value={maxPrice ?? ''}
               onChange={(e) => setMaxPrice(e.target.value ? Number(e.target.value) : undefined)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none"
+              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-slate-900 dark:text-white focus:outline-none"
               placeholder="e.g. 260000"
             />
           </div>
@@ -118,30 +118,30 @@ export const CreateSearchModal: React.FC<CreateSearchModalProps> = ({
 
         <div className="grid grid-cols-3 gap-3">
           <div>
-            <label className="font-bold text-slate-700 block mb-1">Min Area (m²)</label>
+            <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Min Area (m²)</label>
             <input
               type="number"
               value={minArea ?? ''}
               onChange={(e) => setMinArea(e.target.value ? Number(e.target.value) : undefined)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none"
+              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-slate-900 dark:text-white focus:outline-none"
             />
           </div>
           <div>
-            <label className="font-bold text-slate-700 block mb-1">Min Rooms</label>
+            <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Min Rooms</label>
             <input
               type="number"
               value={minRooms ?? ''}
               onChange={(e) => setMinRooms(e.target.value ? Number(e.target.value) : undefined)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none"
+              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-slate-900 dark:text-white focus:outline-none"
             />
           </div>
           <div>
-            <label className="font-bold text-slate-700 block mb-1">Min Build Year</label>
+            <label className="font-bold text-slate-700 dark:text-slate-300 block mb-1">Min Build Year</label>
             <input
               type="number"
               value={minBuildYear ?? ''}
               onChange={(e) => setMinBuildYear(e.target.value ? Number(e.target.value) : undefined)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-900 focus:outline-none"
+              className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-slate-900 dark:text-white focus:outline-none"
             />
           </div>
         </div>
@@ -165,7 +165,7 @@ export const CreateSearchModal: React.FC<CreateSearchModalProps> = ({
                 className={`p-2 rounded-lg text-left font-medium border transition-all ${
                   scheduleType === s.value
                     ? 'bg-emerald-600 text-white border-emerald-600 shadow-xs'
-                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
+                    : 'bg-white text-slate-700 dark:text-slate-300 border-slate-200 hover:bg-slate-50'
                 }`}
               >
                 {s.label}
@@ -176,7 +176,7 @@ export const CreateSearchModal: React.FC<CreateSearchModalProps> = ({
 
         {/* Minimum Match Score Threshold */}
         <div>
-          <div className="flex justify-between font-bold text-slate-700 mb-1">
+          <div className="flex justify-between font-bold text-slate-700 dark:text-slate-300 mb-1">
             <span>Minimum Match Score for Alerts:</span>
             <span className="text-emerald-700">{minimumScore} / 100</span>
           </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { PropertyFilters, FINNISH_CITIES, FINNISH_DISTRICTS, PROPERTY_TYPES } from "@koti-scout/shared";
+import { PropertyFilters, FINNISH_CITIES, FINNISH_DISTRICTS } from "@koti-scout/shared";
 import { RotateCcw, Filter } from "lucide-react";
 import { Button } from "../../components/ui/Button";
 
@@ -52,16 +52,16 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
   };
 
   return (
-    <div className={`space-y-6 ${isMobile ? "p-0" : "p-5 bg-slate-900/90 rounded-2xl border border-slate-800 shadow-xl"}`}>
-      <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+    <div className={`space-y-6 ${isMobile ? "p-0" : "p-5 bg-white dark:bg-slate-900/90 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm dark:shadow-xl"}`}>
+      <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-emerald-400" />
-          <h3 className="text-sm font-bold text-white">Advanced Filters</h3>
+          <Filter className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+          <h3 className="text-sm font-bold text-slate-900 dark:text-white">Advanced Filters</h3>
         </div>
         <button
           type="button"
           onClick={onReset}
-          className="text-xs text-slate-400 hover:text-rose-400 flex items-center gap-1 font-medium transition-colors"
+          className="text-xs text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 flex items-center gap-1 font-medium transition-colors"
         >
           <RotateCcw className="w-3 h-3" />
           <span>Clear all</span>
@@ -70,15 +70,15 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
       {/* City Selector */}
       <div className="space-y-2">
-        <label className="text-xs font-bold text-slate-300 block">City / Municipality</label>
+        <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block">City / Municipality</label>
         <select
           value={selectedCity}
           onChange={(e) => handleCityChange(e.target.value)}
           aria-label="Filter by City"
-          className="w-full text-xs font-medium bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none cursor-pointer"
+          className="w-full text-xs font-medium bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2.5 text-slate-900 dark:text-white focus:ring-2 focus:ring-emerald-500 focus:outline-none cursor-pointer"
         >
           {FINNISH_CITIES.map((c) => (
-            <option key={c} value={c} className="bg-slate-900 text-white">
+            <option key={c} value={c} className="bg-white dark:bg-slate-900 text-slate-900 dark:text-white">
               {c}
             </option>
           ))}
@@ -88,7 +88,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
       {/* District Selector */}
       {availableDistricts.length > 0 && (
         <div className="space-y-2">
-          <label className="text-xs font-bold text-slate-300 block">
+          <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block">
             Districts in {selectedCity}
           </label>
           <div className="flex flex-wrap gap-1.5 max-h-44 overflow-y-auto pr-1">
@@ -101,8 +101,8 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                   onClick={() => handleDistrictToggle(d.name)}
                   className={`px-2.5 py-1 text-xs rounded-lg border transition-all ${
                     isSelected
-                      ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold"
-                      : "bg-slate-950/80 text-slate-400 border-slate-800 hover:bg-slate-800 hover:text-slate-200"
+                      ? "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-500/40 font-bold"
+                      : "bg-slate-100 dark:bg-slate-950/80 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200"
                   }`}
                 >
                   {d.name}
@@ -115,7 +115,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
 
       {/* Price Range */}
       <div className="space-y-2">
-        <label className="text-xs font-bold text-slate-300 block">Price Range (€)</label>
+        <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block">Price Range (€)</label>
         <div className="grid grid-cols-2 gap-2">
           <input
             type="number"
@@ -128,7 +128,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 minPrice: e.target.value ? Number(e.target.value) : undefined
               })
             }
-            className="w-full text-xs bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+            className="w-full text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
           />
           <input
             type="number"
@@ -141,14 +141,14 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 maxPrice: e.target.value ? Number(e.target.value) : undefined
               })
             }
-            className="w-full text-xs bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+            className="w-full text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
           />
         </div>
       </div>
 
       {/* Area Range */}
       <div className="space-y-2">
-        <label className="text-xs font-bold text-slate-300 block">Living Area (m²)</label>
+        <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block">Living Area (m²)</label>
         <div className="grid grid-cols-2 gap-2">
           <input
             type="number"
@@ -161,7 +161,7 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 minArea: e.target.value ? Number(e.target.value) : undefined
               })
             }
-            className="w-full text-xs bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+            className="w-full text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
           />
           <input
             type="number"
@@ -174,14 +174,14 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 maxArea: e.target.value ? Number(e.target.value) : undefined
               })
             }
-            className="w-full text-xs bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+            className="w-full text-xs bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-3 py-2 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:ring-2 focus:ring-emerald-500 focus:outline-none"
           />
         </div>
       </div>
 
       {/* Rooms Selector */}
       <div className="space-y-2">
-        <label className="text-xs font-bold text-slate-300 block">Rooms (Multi-select)</label>
+        <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block">Rooms (Multi-select)</label>
         <div className="grid grid-cols-5 gap-1.5">
           {[1, 2, 3, 4, 5].map((r) => {
             const selectedRooms = filters.rooms || (filters.minRooms ? [filters.minRooms] : []);
@@ -193,8 +193,8 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
                 onClick={() => handleRoomToggle(r)}
                 className={`py-2 text-xs font-bold rounded-xl border transition-all ${
                   isSelected
-                    ? "bg-emerald-500 text-slate-950 border-emerald-400 shadow-md"
-                    : "bg-slate-950 text-slate-400 border-slate-800 hover:bg-slate-800 hover:text-slate-200"
+                    ? "bg-emerald-600 dark:bg-emerald-500 text-white dark:text-slate-950 border-emerald-600 dark:border-emerald-400 shadow-sm"
+                    : "bg-slate-100 dark:bg-slate-950 text-slate-700 dark:text-slate-400 border-slate-200 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-200"
                 }`}
               >
                 {r === 5 ? "5+" : `${r}h`}
@@ -205,24 +205,24 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
       </div>
 
       {/* Amenities Checkboxes */}
-      <div className="space-y-2 pt-2 border-t border-slate-800">
-        <label className="text-xs font-bold text-slate-300 block">Amenities</label>
-        <div className="space-y-2 text-xs text-slate-300">
-          <label className="flex items-center gap-2 cursor-pointer hover:text-white">
+      <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+        <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block">Amenities</label>
+        <div className="space-y-2 text-xs text-slate-700 dark:text-slate-300">
+          <label className="flex items-center gap-2 cursor-pointer hover:text-slate-900 dark:hover:text-white">
             <input
               type="checkbox"
               checked={filters.balconyRequired || false}
               onChange={(e) => onChange({ ...filters, balconyRequired: e.target.checked || undefined })}
-              className="rounded bg-slate-950 border-slate-800 text-emerald-500 focus:ring-emerald-500"
+              className="rounded bg-slate-100 dark:bg-slate-950 border-slate-300 dark:border-slate-800 text-emerald-600 dark:text-emerald-500 focus:ring-emerald-500"
             />
             <span>Balcony (Parveke)</span>
           </label>
-          <label className="flex items-center gap-2 cursor-pointer hover:text-white">
+          <label className="flex items-center gap-2 cursor-pointer hover:text-slate-900 dark:hover:text-white">
             <input
               type="checkbox"
               checked={filters.saunaRequired || false}
               onChange={(e) => onChange({ ...filters, saunaRequired: e.target.checked || undefined })}
-              className="rounded bg-slate-950 border-slate-800 text-emerald-500 focus:ring-emerald-500"
+              className="rounded bg-slate-100 dark:bg-slate-950 border-slate-300 dark:border-slate-800 text-emerald-600 dark:text-emerald-500 focus:ring-emerald-500"
             />
             <span>Sauna</span>
           </label>
@@ -230,8 +230,8 @@ export const FilterSidebar: React.FC<FilterSidebarProps> = ({
       </div>
 
       {isMobile && onApply && (
-        <div className="pt-4 border-t border-slate-800">
-          <Button variant="primary" size="lg" className="w-full bg-emerald-500 text-slate-950 font-bold" onClick={onApply}>
+        <div className="pt-4 border-t border-slate-100 dark:border-slate-800">
+          <Button variant="primary" size="lg" className="w-full bg-emerald-600 dark:bg-emerald-500 text-white dark:text-slate-950 font-bold" onClick={onApply}>
             Apply Filters
           </Button>
         </div>

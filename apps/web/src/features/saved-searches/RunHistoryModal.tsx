@@ -20,11 +20,11 @@ export const RunHistoryModal: React.FC<RunHistoryModalProps> = ({
     <Modal isOpen={isOpen} onClose={onClose} title={`Scan History: ${savedSearchName}`} maxWidth="xl">
       <div className="space-y-4">
         {runs.length === 0 ? (
-          <div className="p-8 text-center text-xs text-slate-500">
+          <div className="p-8 text-center text-xs text-slate-500 dark:text-slate-500 dark:text-slate-400">
             No execution runs recorded yet. Click &quot;Run Now&quot; to execute a scan.
           </div>
         ) : (
-          <div className="divide-y divide-slate-100 max-h-96 overflow-y-auto">
+          <div className="divide-y divide-slate-100 dark:divide-slate-800 max-h-96 overflow-y-auto">
             {runs.map((run) => {
               const timeStr = new Date(run.startedAt).toLocaleString('fi-FI', {
                 timeZone: 'Europe/Helsinki'
@@ -40,7 +40,7 @@ export const RunHistoryModal: React.FC<RunHistoryModalProps> = ({
                       <AlertTriangle className="w-4 h-4 text-rose-600 flex-shrink-0" />
                     )}
                     <div>
-                      <div className="font-bold text-slate-900 flex items-center gap-2">
+                      <div className="font-bold text-slate-900 dark:text-white flex items-center gap-2">
                         <span>{timeStr} (EET)</span>
                         <span
                           className={`text-[10px] px-1.5 py-0.2 rounded font-semibold ${
@@ -50,17 +50,17 @@ export const RunHistoryModal: React.FC<RunHistoryModalProps> = ({
                           {run.status}
                         </span>
                       </div>
-                      <p className="text-slate-500 mt-0.5">
+                      <p className="text-slate-500 dark:text-slate-500 dark:text-slate-400 mt-0.5">
                         {run.totalFound} properties scanned • {run.newProperties} new • {run.priceChanges} price drops
                       </p>
                     </div>
                   </div>
 
                   <div className="text-right">
-                    <span className="font-black text-slate-800 text-sm">
+                    <span className="font-black text-slate-800 dark:text-slate-200 text-sm">
                       {run.matchingProperties}
                     </span>
-                    <span className="text-[10px] text-slate-400 block">matching score</span>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 block">matching score</span>
                   </div>
                 </div>
               );

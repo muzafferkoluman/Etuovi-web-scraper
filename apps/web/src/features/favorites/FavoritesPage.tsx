@@ -39,17 +39,17 @@ export const FavoritesPage: React.FC<FavoritesPageProps> = ({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-black text-white tracking-tight">Saved Favorites & Notes</h1>
-        <p className="text-xs text-slate-400 mt-0.5">
+        <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Saved Favorites & Notes</h1>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
           Properties you have saved for further inspection. Keep private notes on pipe renovations, maintenance records, and viewing impressions.
         </p>
       </div>
 
       {favorites.length === 0 ? (
-        <div className="bg-slate-900/90 p-12 rounded-2xl border border-slate-800 text-center max-w-md mx-auto shadow-sm space-y-3">
+        <div className="bg-white dark:bg-slate-900/90 p-12 rounded-2xl border border-slate-200 dark:border-slate-800 text-center max-w-md mx-auto shadow-sm space-y-3">
           <Heart className="w-10 h-10 text-slate-300 mx-auto" />
-          <h3 className="text-base font-bold text-white">No favorite properties saved</h3>
-          <p className="text-xs text-slate-400">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white">No favorite properties saved</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">
             Click the heart icon on any property card to save it here with custom notes.
           </p>
         </div>
@@ -61,7 +61,7 @@ export const FavoritesPage: React.FC<FavoritesPageProps> = ({
             const isEditing = editingId === fav.id;
 
             return (
-              <div key={fav.id} className="flex flex-col bg-slate-900/90 rounded-2xl border border-slate-800 overflow-hidden shadow-sm">
+              <div key={fav.id} className="flex flex-col bg-white dark:bg-slate-900/90 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
                 <PropertyCard
                   property={prop}
                   isFavorite={true}
@@ -72,10 +72,10 @@ export const FavoritesPage: React.FC<FavoritesPageProps> = ({
                 />
 
                 {/* Personal Notes Section */}
-                <div className="p-4 bg-slate-950/80 border-t border-slate-800 flex-1 flex flex-col justify-between text-xs">
+                <div className="p-4 bg-slate-50 dark:bg-slate-950/80 border-t border-slate-200 dark:border-slate-800 flex-1 flex flex-col justify-between text-xs">
                   <div>
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="font-bold text-slate-200 flex items-center gap-1">
+                      <span className="font-bold text-slate-700 dark:text-slate-200 flex items-center gap-1">
                         <Edit3 className="w-3 h-3 text-emerald-600" />
                         <span>Personal Notes</span>
                       </span>
@@ -95,7 +95,7 @@ export const FavoritesPage: React.FC<FavoritesPageProps> = ({
                           value={notesText}
                           onChange={(e) => setNotesText(e.target.value)}
                           placeholder="Add personal impressions, questions for broker, renovation notes..."
-                          className="w-full text-xs p-2.5 bg-slate-900/90 border border-slate-800 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
+                          className="w-full text-xs p-2.5 bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                           rows={3}
                         />
                         <div className="flex justify-end gap-1.5">
@@ -109,7 +109,7 @@ export const FavoritesPage: React.FC<FavoritesPageProps> = ({
                         </div>
                       </div>
                     ) : (
-                      <p className="text-slate-600 italic bg-slate-900/90 p-2.5 rounded-lg border border-slate-800 min-h-[48px]">
+                      <p className="text-slate-600 italic bg-white dark:bg-slate-900/90 p-2.5 rounded-lg border border-slate-200 dark:border-slate-800 min-h-[48px]">
                         {fav.notes || 'No notes yet. Click edit to add notes.'}
                       </p>
                     )}

@@ -62,10 +62,10 @@ export const SavedSearchesPage: React.FC<SavedSearchesPageProps> = ({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-black text-white tracking-tight">
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             Saved Searches & Automated Scans
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             Configure automated monitoring schedules in Europe/Helsinki timezone. The system scans listings, computes match scores, and alerts you to price drops.
           </p>
         </div>
@@ -94,29 +94,29 @@ export const SavedSearchesPage: React.FC<SavedSearchesPageProps> = ({
           return (
             <div
               key={search.id}
-              className="nordic-card p-5 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-sm flex flex-col justify-between"
+              className="nordic-card p-5 rounded-2xl bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-2">
                   <span
                     className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${
-                      search.enabled ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-400'
+                      search.enabled ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500 dark:text-slate-400'
                     }`}
                   >
                     {search.enabled ? 'ACTIVE MONITOR' : 'PAUSED'}
                   </span>
 
-                  <div className="flex items-center gap-1.5 text-[11px] text-slate-400 font-medium">
+                  <div className="flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-slate-400 font-medium">
                     <Clock className="w-3.5 h-3.5 text-emerald-600" />
                     <span>{search.timezone || 'Europe/Helsinki'}</span>
                   </div>
                 </div>
 
-                <h3 className="text-base font-bold text-white">{search.name}</h3>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">{search.name}</h3>
 
                 {/* Filters summary */}
-                <div className="bg-slate-950/80/80 p-3 rounded-xl border border-slate-800 my-3 text-xs space-y-1 text-slate-200">
-                  <div className="font-semibold text-white">
+                <div className="bg-slate-50 dark:bg-slate-50 dark:bg-slate-950/80 p-3 rounded-xl border border-slate-200 dark:border-slate-800 my-3 text-xs space-y-1 text-slate-700 dark:text-slate-200">
+                  <div className="font-semibold text-slate-900 dark:text-white">
                     {search.filters.cities?.join(', ') || 'All Finnish Cities'}
                   </div>
                   {search.filters.maxPrice && (
@@ -134,14 +134,14 @@ export const SavedSearchesPage: React.FC<SavedSearchesPageProps> = ({
                 </div>
 
                 {/* Schedule times */}
-                <div className="flex items-center justify-between text-xs text-slate-400 mb-4">
+                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-4">
                   <span>Schedule: {search.scheduleType}</span>
                   <span>{search.customScheduleTimes?.join(', ') || '08:00, 14:00, 20:00'}</span>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 border-t border-slate-800 flex items-center justify-between gap-2">
+              <div className="pt-3 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   <Button
                     variant="outline"
@@ -154,7 +154,7 @@ export const SavedSearchesPage: React.FC<SavedSearchesPageProps> = ({
                   </Button>
                   <button
                     onClick={() => handleDelete(search.id)}
-                    className="p-2 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-slate-950/80 transition-colors"
+                    className="p-2 text-slate-500 dark:text-slate-400 hover:text-rose-600 rounded-lg hover:bg-slate-50 dark:bg-slate-950/80 transition-colors"
                     title="Delete search"
                   >
                     <Trash2 className="w-4 h-4" />

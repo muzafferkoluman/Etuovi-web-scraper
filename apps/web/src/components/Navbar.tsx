@@ -166,7 +166,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         "w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-colors text-left",
                         language === lang.code
                           ? "bg-emerald-500/15 text-emerald-400 font-bold border border-emerald-500/20"
-                          : "text-slate-300 hover:bg-slate-800/70 hover:text-white"
+                          : "text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white"
                       )}
                     >
                       <div className="flex items-center gap-2">
@@ -198,11 +198,11 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               {/* Notification Popover Menu */}
               {showNotifMenu && (
-                <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <div className="p-4 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between">
+                <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                  <div className="p-4 bg-slate-50 dark:bg-slate-950/80 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Bell className="w-4 h-4 text-emerald-400" />
-                      <span className="text-xs font-bold text-white uppercase tracking-wider">
+                      <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">
                         {t("nav.notifications")} ({unreadCount})
                       </span>
                     </div>
@@ -218,9 +218,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                     )}
                   </div>
 
-                  <div className="max-h-80 overflow-y-auto divide-y divide-slate-800/60">
+                  <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800/60">
                     {notifications.length === 0 ? (
-                      <div className="p-6 text-center text-xs text-slate-400">
+                      <div className="p-6 text-center text-xs text-slate-500 dark:text-slate-400">
                         {t("nav.noNotifications")}
                       </div>
                     ) : (
@@ -235,8 +235,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                             }
                           }}
                           className={cn(
-                            "p-3.5 hover:bg-slate-800/50 cursor-pointer transition-colors flex gap-3 items-start",
-                            !n.read && "bg-emerald-950/30"
+                            "p-3.5 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors flex gap-3 items-start",
+                            !n.read && "bg-emerald-50/60 dark:bg-emerald-950/30"
                           )}
                         >
                           <div className="mt-0.5 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
@@ -250,14 +250,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between">
-                              <p className="text-xs font-bold text-slate-200 truncate">
+                              <p className="text-xs font-bold text-slate-900 dark:text-slate-200 truncate">
                                 {n.title}
                               </p>
                               {!n.read && (
                                 <span className="w-2 h-2 rounded-full bg-emerald-400" />
                               )}
                             </div>
-                            <p className="text-xs text-slate-400 line-clamp-2 mt-0.5">
+                            <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 mt-0.5">
                               {n.message}
                             </p>
                           </div>
@@ -266,7 +266,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     )}
                   </div>
 
-                  <div className="p-3 bg-slate-950/80 border-t border-slate-800 text-center">
+                  <div className="p-3 bg-slate-50 dark:bg-slate-950/80 border-t border-slate-100 dark:border-slate-800 text-center">
                     <Link
                       to="/notifications"
                       onClick={() => setShowNotifMenu(false)}

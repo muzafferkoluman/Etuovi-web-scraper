@@ -18,10 +18,10 @@ export const ComparePage: React.FC<ComparePageProps> = ({
 }) => {
   if (properties.length === 0) {
     return (
-      <div className="bg-slate-900/90 p-12 rounded-2xl border border-slate-800 text-center max-w-md mx-auto shadow-sm space-y-4">
+      <div className="bg-white dark:bg-slate-900/90 p-12 rounded-2xl border border-slate-200 dark:border-slate-800 text-center max-w-md mx-auto shadow-sm space-y-4">
         <Scale className="w-10 h-10 text-slate-300 mx-auto" />
-        <h2 className="text-base font-bold text-white">No properties selected for comparison</h2>
-        <p className="text-xs text-slate-400">
+        <h2 className="text-base font-bold text-slate-900 dark:text-white">No properties selected for comparison</h2>
+        <p className="text-xs text-slate-500 dark:text-slate-400">
           Select between 2 and 4 properties from Search or Dashboard to compare them side-by-side.
         </p>
         <Link to="/search">
@@ -44,26 +44,26 @@ export const ComparePage: React.FC<ComparePageProps> = ({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-white tracking-tight">
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             Property Comparison Matrix
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
             Side-by-side analysis of asking price, €/m², maintenance fees, and Finnish property attributes.
           </p>
         </div>
 
         <Button variant="outline" size="sm" onClick={onClearCompare}>
-          <Trash2 className="w-3.5 h-3.5 mr-1 text-slate-400" />
+          <Trash2 className="w-3.5 h-3.5 mr-1 text-slate-500 dark:text-slate-400" />
           <span>Clear comparison ({properties.length})</span>
         </Button>
       </div>
 
       {/* Comparison Matrix Table */}
-      <div className="bg-slate-900/90 rounded-2xl border border-slate-800 overflow-x-auto shadow-sm">
+      <div className="bg-white dark:bg-slate-900/90 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-x-auto shadow-sm">
         <table className="w-full text-xs text-left border-collapse">
           <thead>
-            <tr className="border-b border-slate-800 bg-slate-950/80/70">
-              <th className="p-4 font-bold text-slate-200 w-44">Attribute</th>
+            <tr className="border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/80/70">
+              <th className="p-4 font-bold text-slate-700 dark:text-slate-200 w-44">Attribute</th>
               {properties.map((p) => (
                 <th key={p.id} className="p-4 min-w-[220px] max-w-[260px] align-top">
                   <div className="relative aspect-[16/10] rounded-xl overflow-hidden mb-2 bg-slate-100">
@@ -77,7 +77,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({
                     </button>
                   </div>
                   <div className="font-bold text-white text-sm">{p.address}</div>
-                  <div className="text-[11px] text-slate-400">{p.district}, {p.city}</div>
+                  <div className="text-[11px] text-slate-500 dark:text-slate-400">{p.district}, {p.city}</div>
                 </th>
               ))}
             </tr>
@@ -108,7 +108,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({
 
             {/* Asking Price */}
             <tr>
-              <td className="p-4 font-semibold text-slate-200">Asking Price</td>
+              <td className="p-4 font-semibold text-slate-700 dark:text-slate-200">Asking Price</td>
               {properties.map((p) => {
                 const isLowest = p.price === minPrice && properties.length > 1;
                 return (
@@ -123,7 +123,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({
 
             {/* Living Area */}
             <tr>
-              <td className="p-4 font-semibold text-slate-200">Living Area (m²)</td>
+              <td className="p-4 font-semibold text-slate-700 dark:text-slate-200">Living Area (m²)</td>
               {properties.map((p) => {
                 const isLargest = p.area === maxArea && properties.length > 1;
                 return (
@@ -138,7 +138,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({
 
             {/* €/m² */}
             <tr>
-              <td className="p-4 font-semibold text-slate-200">Price per m²</td>
+              <td className="p-4 font-semibold text-slate-700 dark:text-slate-200">Price per m²</td>
               {properties.map((p) => {
                 const isLowest = p.pricePerSquareMeter === minSqmPrice && properties.length > 1;
                 return (
@@ -153,7 +153,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({
 
             {/* Rooms */}
             <tr>
-              <td className="p-4 font-semibold text-slate-200">Rooms & Layout</td>
+              <td className="p-4 font-semibold text-slate-700 dark:text-slate-200">Rooms & Layout</td>
               {properties.map((p) => (
                 <td key={p.id} className="p-4 text-slate-800">
                   {p.rooms} rooms ({p.bedrooms || 1} bedrooms)
@@ -163,7 +163,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({
 
             {/* Property Type */}
             <tr>
-              <td className="p-4 font-semibold text-slate-200">Property Type</td>
+              <td className="p-4 font-semibold text-slate-700 dark:text-slate-200">Property Type</td>
               {properties.map((p) => (
                 <td key={p.id} className="p-4 text-slate-800">
                   {p.propertyType}
@@ -173,7 +173,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({
 
             {/* Build Year */}
             <tr>
-              <td className="p-4 font-semibold text-slate-200">Build Year</td>
+              <td className="p-4 font-semibold text-slate-700 dark:text-slate-200">Build Year</td>
               {properties.map((p) => (
                 <td key={p.id} className="p-4 text-slate-800 font-medium">
                   {p.buildYear || '—'}
@@ -183,7 +183,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({
 
             {/* Monthly Maintenance Fee */}
             <tr>
-              <td className="p-4 font-semibold text-slate-200">Maintenance Fee (Hoitovastike)</td>
+              <td className="p-4 font-semibold text-slate-700 dark:text-slate-200">Maintenance Fee (Hoitovastike)</td>
               {properties.map((p) => (
                 <td key={p.id} className="p-4 text-slate-800">
                   {p.maintenanceFee ? `${p.maintenanceFee} € / month` : 'N/A'}
@@ -193,7 +193,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({
 
             {/* Balcony */}
             <tr>
-              <td className="p-4 font-semibold text-slate-200">Balcony (Parveke)</td>
+              <td className="p-4 font-semibold text-slate-700 dark:text-slate-200">Balcony (Parveke)</td>
               {properties.map((p) => (
                 <td key={p.id} className="p-4">
                   {p.hasBalcony ? (
@@ -201,7 +201,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({
                       <Check className="w-4 h-4" /> Yes
                     </span>
                   ) : (
-                    <span className="text-slate-400">No</span>
+                    <span className="text-slate-500 dark:text-slate-400">No</span>
                   )}
                 </td>
               ))}
@@ -209,7 +209,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({
 
             {/* Sauna */}
             <tr>
-              <td className="p-4 font-semibold text-slate-200">Private Sauna (Oma sauna)</td>
+              <td className="p-4 font-semibold text-slate-700 dark:text-slate-200">Private Sauna (Oma sauna)</td>
               {properties.map((p) => (
                 <td key={p.id} className="p-4">
                   {p.hasSauna ? (
@@ -217,7 +217,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({
                       <Check className="w-4 h-4" /> Yes
                     </span>
                   ) : (
-                    <span className="text-slate-400">No</span>
+                    <span className="text-slate-500 dark:text-slate-400">No</span>
                   )}
                 </td>
               ))}
@@ -225,7 +225,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({
 
             {/* Elevator */}
             <tr>
-              <td className="p-4 font-semibold text-slate-200">Elevator (Hissi)</td>
+              <td className="p-4 font-semibold text-slate-700 dark:text-slate-200">Elevator (Hissi)</td>
               {properties.map((p) => (
                 <td key={p.id} className="p-4">
                   {p.hasElevator ? (
@@ -233,7 +233,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({
                       <Check className="w-4 h-4" /> Yes
                     </span>
                   ) : (
-                    <span className="text-slate-400">No</span>
+                    <span className="text-slate-500 dark:text-slate-400">No</span>
                   )}
                 </td>
               ))}
@@ -241,7 +241,7 @@ export const ComparePage: React.FC<ComparePageProps> = ({
 
             {/* Energy Class */}
             <tr>
-              <td className="p-4 font-semibold text-slate-200">Energy Class</td>
+              <td className="p-4 font-semibold text-slate-700 dark:text-slate-200">Energy Class</td>
               {properties.map((p) => (
                 <td key={p.id} className="p-4 font-mono text-slate-800">
                   {p.energyClass || 'E2018'}
