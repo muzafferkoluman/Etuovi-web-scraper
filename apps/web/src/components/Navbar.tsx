@@ -1,92 +1,95 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import {
-  Compass,
-  Bookmark,
-  Bell,
-  SlidersHorizontal,
-  Home,
+  Search,
+  BookmarkCheck,
+  Heart,
   Scale,
+  Bell,
   Sparkles,
+  LogOut,
   CheckCheck,
   TrendingDown,
   Building,
-  Heart,
-  LogOut
-} from 'lucide-react';
-import { cn } from '../lib/utils';
-import { AppNotification } from '@koti-scout/shared';
-import { useAuth } from '../contexts/AuthContext';
+  Terminal,
+  Activity,
+  ChevronDown
+} from "lucide-react";
+import { useAuth } from "../contexts/AuthContext";
+import { cn } from "../lib/utils";
+import { PropertyNotification } from "@koti-scout/shared";
 
-interface NavbarProps {
-  notifications: AppNotification[];
-  unreadCount: number;
-  compareCount: number;
-  onMarkRead: (id: string) => void;
-  onMarkAllRead: () => void;
-  onOpenNotificationProperty?: (propId: string) => void;
+export interface NavbarProps {
+  notifications?: PropertyNotification[];
+  unreadCount?: number;
+  compareCount?: number;
+  onMarkRead?: (id: string) => void;
+  onMarkAllRead?: () => void;
+  onOpenNotificationProperty?: (propertyId: string) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
-  notifications,
-  unreadCount,
-  compareCount,
-  onMarkRead,
-  onMarkAllRead,
+  notifications = [],
+  unreadCount = 0,
+  compareCount = 0,
+  onMarkRead = () => {},
+  onMarkAllRead = () => {},
   onOpenNotificationProperty
 }) => {
   const location = useLocation();
   const { user, signOut } = useAuth();
   const [showNotifMenu, setShowNotifMenu] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   const navItems = [
-    { label: 'Dashboard', path: '/', icon: Home },
-    { label: 'Search & Explore', path: '/search', icon: Compass },
-    { label: 'Saved Searches', path: '/saved-searches', icon: Bookmark },
-    { label: 'Favorites', path: '/favorites', icon: Heart },
+    { path: "/", label: "Dashboard", icon: Sparkles },
+    { path: "/search", label: "Explore", icon: Search },
+    { path: "/saved-searches", label: "Saved Searches", icon: BookmarkCheck },
+    { path: "/favorites", label: "Favorites", icon: Heart },
     {
-      label: 'Compare',
-      path: '/compare',
+      path: "/compare",
+      label: "Compare",
       icon: Scale,
-      badge: compareCount > 0 ? compareCount : null
+      badge: compareCount > 0 ? compareCount : undefined
     },
-    { label: 'Settings', path: '/settings', icon: SlidersHorizontal }
+    { path: "/dev", label: "Dev Radar", icon: Terminal }
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <header className="sticky top-0 z-50 glass-nav transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Brand Logo */}
-          <div className="flex items-center gap-3">
-            <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform">
-                <Home className="w-5 h-5" />
+        <div className="flex items-center justify-between h-16 sm:h-20">
+          
+          {/* Logo & Brand Identity */}
+          <Link to="/" className="flex items-center gap-3 group">
+            <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 via-teal-500 to-emerald-700 p-0.5 shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+              <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                <Sparkles className="w-5 h-5 text-emerald-400 animate-pulse" />
               </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-bold tracking-tight text-slate-900 flex items-center gap-1.5">
-                  KotiScout
-                  <span className="text-[10px] uppercase tracking-wider bg-emerald-100 text-emerald-800 font-semibold px-1.5 py-0.5 rounded">
-                    FI
-                  </span>
-                  <span className="text-[9px] uppercase tracking-wider bg-amber-100 text-amber-900 font-extrabold px-1.5 py-0.5 rounded border border-amber-200" title="MockPropertyProvider is currently active with synthetic Finnish demo data">
-                    DEMO DATA
-                  </span>
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-lg sm:text-xl font-black tracking-tight text-white font-mono">
+                  KOTI<span className="text-emerald-400">SCOUT</span>
                 </span>
-                <span className="text-[11px] text-slate-500 font-medium -mt-1">
-                  Property Intelligence
+                <span className="px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-full flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                  Etuovi Live
                 </span>
               </div>
-            </Link>
-          </div>
+              <p className="text-[10px] text-slate-400 font-medium hidden sm:block">
+                AI Finnish Real Estate Intelligence & Radar
+              </p>
+            </div>
+          </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
+          {/* Desktop Navigation Bar Links */}
+          <nav className="hidden md:flex items-center gap-1.5 bg-slate-900/60 p-1.5 rounded-2xl border border-slate-800/80 backdrop-blur-md">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive =
-                item.path === '/'
-                  ? location.pathname === '/'
+                item.path === "/"
+                  ? location.pathname === "/"
                   : location.pathname.startsWith(item.path);
 
               return (
@@ -94,16 +97,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                   key={item.path}
                   to={item.path}
                   className={cn(
-                    'relative px-3.5 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2',
+                    "flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all relative",
                     isActive
-                      ? 'bg-emerald-50 text-emerald-700 font-semibold'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/80'
+                      ? "bg-gradient-to-r from-emerald-500/20 to-teal-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm"
+                      : "text-slate-300 hover:text-white hover:bg-slate-800/60 border border-transparent"
                   )}
                 >
-                  <Icon className="w-4 h-4" />
-                  {item.label}
-                  {item.badge && (
-                    <span className="ml-1 px-1.5 py-0.2 rounded-full bg-emerald-600 text-white text-[10px] font-bold">
+                  <Icon className={cn("w-4 h-4", isActive ? "text-emerald-400" : "text-slate-400")} />
+                  <span>{item.label}</span>
+                  {item.badge !== undefined && (
+                    <span className="px-1.5 py-0.5 rounded-full bg-emerald-500 text-slate-950 text-[10px] font-black shadow-sm">
                       {item.badge}
                     </span>
                   )}
@@ -112,37 +115,46 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* Right Actions: Notifications bell & Profile */}
+          {/* Right Action Controls: Live Status, Bell, Profile */}
           <div className="flex items-center gap-3">
+            
+            {/* Live Feed Pill */}
+            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs font-medium text-slate-300">
+              <Activity className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+              <span>EET (Helsinki)</span>
+            </div>
+
             {/* Notification Bell Dropdown */}
             <div className="relative">
               <button
+                type="button"
                 onClick={() => setShowNotifMenu(!showNotifMenu)}
-                className="relative p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors focus:outline-none"
-                aria-label="View notifications"
+                className="relative p-2.5 rounded-xl bg-slate-900/80 text-slate-300 hover:text-white border border-slate-800 hover:border-slate-700 transition-all focus:outline-none"
+                aria-label="Notifications"
               >
-                <Bell className="w-5 h-5" />
+                <Bell className="w-4 h-4" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-1.5 w-4 h-4 rounded-full bg-emerald-500 text-white text-[10px] font-bold flex items-center justify-center animate-pulse">
+                  <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-emerald-500 text-slate-950 text-[10px] font-black flex items-center justify-center shadow-md animate-pulse">
                     {unreadCount}
                   </span>
                 )}
               </button>
 
-              {/* Notification Center Menu */}
+              {/* Notification Popover Menu */}
               {showNotifMenu && (
-                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <div className="p-3.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+                <div className="absolute right-0 mt-3 w-80 sm:w-96 bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                  <div className="p-4 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Bell className="w-4 h-4 text-emerald-600" />
-                      <span className="text-sm font-semibold text-slate-900">
-                        Notifications ({unreadCount} unread)
+                      <Bell className="w-4 h-4 text-emerald-400" />
+                      <span className="text-xs font-bold text-white uppercase tracking-wider">
+                        Live Notifications ({unreadCount})
                       </span>
                     </div>
                     {unreadCount > 0 && (
                       <button
+                        type="button"
                         onClick={() => onMarkAllRead()}
-                        className="text-xs text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1"
+                        className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1"
                       >
                         <CheckCheck className="w-3.5 h-3.5" />
                         Mark all read
@@ -150,13 +162,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                     )}
                   </div>
 
-                  <div className="max-h-80 overflow-y-auto divide-y divide-slate-100">
+                  <div className="max-h-80 overflow-y-auto divide-y divide-slate-800/60">
                     {notifications.length === 0 ? (
-                      <div className="p-6 text-center text-sm text-slate-500">
-                        No notifications yet. Scheduled searches will notify you of price drops and new matches here.
+                      <div className="p-6 text-center text-xs text-slate-400">
+                        No active notifications. Perodic searches will display live alerts here.
                       </div>
                     ) : (
-                      notifications.slice(0, 5).map((n) => (
+                      notifications.slice(0, 6).map((n) => (
                         <div
                           key={n.id}
                           onClick={() => {
@@ -167,29 +179,29 @@ export const Navbar: React.FC<NavbarProps> = ({
                             }
                           }}
                           className={cn(
-                            'p-3.5 hover:bg-slate-50 cursor-pointer transition-colors flex gap-3 items-start',
-                            !n.read && 'bg-emerald-50/40'
+                            "p-3.5 hover:bg-slate-800/50 cursor-pointer transition-colors flex gap-3 items-start",
+                            !n.read && "bg-emerald-950/30"
                           )}
                         >
-                          <div className="mt-0.5 p-1.5 rounded-lg bg-emerald-100 text-emerald-700">
-                            {n.type === 'PRICE_DROP' ? (
-                              <TrendingDown className="w-4 h-4 text-emerald-600" />
-                            ) : n.type === 'HIGH_SCORE_PROPERTY' ? (
-                              <Sparkles className="w-4 h-4 text-amber-500" />
+                          <div className="mt-0.5 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+                            {n.type === "PRICE_DROP" ? (
+                              <TrendingDown className="w-4 h-4 text-emerald-400" />
+                            ) : n.type === "HIGH_SCORE_PROPERTY" ? (
+                              <Sparkles className="w-4 h-4 text-amber-400" />
                             ) : (
-                              <Building className="w-4 h-4 text-emerald-600" />
+                              <Building className="w-4 h-4 text-emerald-400" />
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between">
-                              <p className="text-xs font-semibold text-slate-900 truncate">
+                              <p className="text-xs font-bold text-slate-200 truncate">
                                 {n.title}
                               </p>
                               {!n.read && (
-                                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                                <span className="w-2 h-2 rounded-full bg-emerald-400" />
                               )}
                             </div>
-                            <p className="text-xs text-slate-600 line-clamp-2 mt-0.5">
+                            <p className="text-xs text-slate-400 line-clamp-2 mt-0.5">
                               {n.message}
                             </p>
                           </div>
@@ -198,44 +210,59 @@ export const Navbar: React.FC<NavbarProps> = ({
                     )}
                   </div>
 
-                  <div className="p-2.5 bg-slate-50 border-t border-slate-100 text-center">
+                  <div className="p-3 bg-slate-950/80 border-t border-slate-800 text-center">
                     <Link
                       to="/notifications"
                       onClick={() => setShowNotifMenu(false)}
-                      className="text-xs text-emerald-600 hover:text-emerald-700 font-semibold"
+                      className="text-xs text-emerald-400 hover:text-emerald-300 font-bold"
                     >
-                      View all notifications →
+                      View all notification logs →
                     </Link>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Timezone badge & Profile pill */}
-            <div className="hidden sm:flex items-center gap-2 pl-2 border-l border-slate-200">
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 text-[11px] font-medium text-slate-600">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Helsinki (EET)
-              </div>
-
+            {/* User Profile Pill */}
+            <div className="hidden sm:block">
               {user ? (
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-900">
-                    <span className="w-2 h-2 rounded-full bg-emerald-600" />
-                    <span className="max-w-[110px] truncate">{user.fullName || user.email.split('@')[0]}</span>
-                  </div>
+                <div className="relative">
                   <button
-                    onClick={() => signOut()}
-                    className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 text-xs font-medium transition-colors"
-                    title="Sign Out"
+                    type="button"
+                    onClick={() => setShowUserMenu(!showUserMenu)}
+                    className="flex items-center gap-2 p-1.5 pl-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition-colors"
                   >
-                    <LogOut className="w-4 h-4" />
+                    <span className="w-2 h-2 rounded-full bg-emerald-400" />
+                    <span className="text-xs font-bold text-slate-200 max-w-[100px] truncate">
+                      {user.fullName || user.email.split("@")[0]}
+                    </span>
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                   </button>
+
+                  {showUserMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-slate-900 rounded-xl shadow-xl border border-slate-800 overflow-hidden z-50">
+                      <div className="p-3 border-b border-slate-800 text-xs">
+                        <p className="text-slate-400">Signed in as</p>
+                        <p className="font-bold text-white truncate">{user.email}</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          signOut();
+                          setShowUserMenu(false);
+                        }}
+                        className="w-full text-left p-3 text-xs font-bold text-rose-400 hover:bg-slate-800 flex items-center gap-2 transition-colors"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <Link
                   to="/login"
-                  className="px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold hover:bg-emerald-700 transition-colors shadow-sm"
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-xs transition-all shadow-md shadow-emerald-500/20"
                 >
                   Sign In
                 </Link>
@@ -245,13 +272,13 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Mobile Bottom Navigation Bar */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-1.5 flex justify-around items-center">
+      {/* Mobile Navigation Bar */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 glass-nav px-2 py-2 flex justify-around items-center border-t border-slate-800">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive =
-            item.path === '/'
-              ? location.pathname === '/'
+            item.path === "/"
+              ? location.pathname === "/"
               : location.pathname.startsWith(item.path);
 
           return (
@@ -259,14 +286,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               key={item.path}
               to={item.path}
               className={cn(
-                'flex flex-col items-center py-1 px-2 rounded-lg text-[10px] font-medium transition-colors',
-                isActive ? 'text-emerald-600 font-semibold' : 'text-slate-500 hover:text-slate-900'
+                "flex flex-col items-center py-1 px-3 rounded-xl text-[10px] font-bold transition-all",
+                isActive
+                  ? "text-emerald-400 bg-emerald-500/10 border border-emerald-500/30"
+                  : "text-slate-400 hover:text-slate-200"
               )}
             >
               <div className="relative">
                 <Icon className="w-5 h-5" />
                 {item.badge && (
-                  <span className="absolute -top-1 -right-2 px-1 rounded-full bg-emerald-600 text-white text-[8px] font-bold">
+                  <span className="absolute -top-1 -right-2 px-1 rounded-full bg-emerald-500 text-slate-950 text-[8px] font-black">
                     {item.badge}
                   </span>
                 )}
