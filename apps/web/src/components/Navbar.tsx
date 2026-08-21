@@ -280,10 +280,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             {/* Dedicated Lina Profile Pill */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs font-bold text-slate-200 shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900/90 border border-emerald-500/30 dark:border-emerald-500/30 text-xs font-bold text-slate-800 dark:text-slate-200 shadow-xs dark:shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
               <span className="text-slate-900 dark:text-white font-mono tracking-wide">Lina</span>
-              <span className="text-emerald-400/80 font-semibold text-[11px] hidden sm:inline">• {t("nav.radarActive")}</span>
+              <span className="text-emerald-700 dark:text-emerald-400 font-semibold text-[11px] hidden sm:inline">• {t("nav.radarActive")}</span>
             </div>
           </div>
         </div>
