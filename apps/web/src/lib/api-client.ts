@@ -157,6 +157,13 @@ export const api = {
     });
   },
 
+  sendTestEmail: (to?: string): Promise<{ success: boolean; mode: string; recipient: string }> => {
+    return fetchJson(`${API_BASE}/notifications/test-email`, {
+      method: "POST",
+      body: JSON.stringify({ to })
+    });
+  },
+
   // Dashboard Stats
   getDashboardStats: (): Promise<DashboardStats> => {
     return fetchJson<DashboardStats>(`${API_BASE}/stats/dashboard`);

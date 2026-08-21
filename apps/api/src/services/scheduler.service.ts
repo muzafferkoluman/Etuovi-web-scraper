@@ -1,3 +1,4 @@
+import { emailDispatcher } from './email.service';
 import { SavedSearch, SearchRun, SearchRunResult } from '@koti-scout/shared';
 import { dbRepository } from '@koti-scout/database';
 import { searchService } from './search.service';
@@ -97,6 +98,13 @@ export class SchedulerService implements SearchScheduler {
               title: `New Property Match: ${newProp.address}`,
               message: `Listed for €${newProp.price.toLocaleString('fi-FI')} in ${newProp.district}, ${newProp.city}. Match Score: ${newProp.score ?? 0}/100.`
             });
+
+            // Dispatch instant email alert
+            try {
+              await emailDispatcher.sendPropertyAlert(newProp, 'GREAT_MATCH');
+            } catch (emailErr) {
+              console.warn('[Scheduler] Email dispatch notice:', emailErr);
+            }
           }
         }
 
@@ -111,6 +119,13 @@ export class SchedulerService implements SearchScheduler {
               title: `Price Drop: ${drop.property.address}`,
               message: `Price reduced by €${Math.abs(drop.diff).toLocaleString('fi-FI')} (${drop.percentage}%) to €${drop.newPrice.toLocaleString('fi-FI')}.`
             });
+
+            // Dispatch instant email alert for price drop
+            try {
+              await emailDispatcher.sendPropertyAlert(drop.property, 'PRICE_DROP');
+            } catch (emailErr) {
+              console.warn('[Scheduler] Email price drop dispatch notice:', emailErr);
+            }
           }
         }
       }

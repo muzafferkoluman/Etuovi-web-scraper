@@ -1,3 +1,5 @@
+import { api } from '../../lib/api-client';
+import { Mail, CheckCircle2 } from 'lucide-react';
 import React from 'react';
 import { AppNotification } from '@koti-scout/shared';
 import { Bell, CheckCheck, TrendingDown, Sparkles, Building, Trash2 } from 'lucide-react';
@@ -17,6 +19,22 @@ export const NotificationsPage: React.FC<NotificationsPageProps> = ({
   onOpenProperty
 }) => {
   const unreadCount = notifications.filter((n) => !n.read).length;
+  const [sendingEmail, setSendingEmail] = React.useState(false);
+  const [emailStatus, setEmailStatus] = React.useState<string | null>(null);
+
+  const handleSendTestEmail = async () => {
+    setSendingEmail(true);
+    setEmailStatus(null);
+    try {
+      const res = await api.sendTestEmail("lina@kotiscout.fi");
+      setEmailStatus(`Alert sent to ${res.recipient} (${res.mode} mode)`);
+      setTimeout(() => setEmailStatus(null), 6000);
+    } catch {
+      setEmailStatus("Failed to send test email");
+    } finally {
+      setSendingEmail(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -28,13 +46,33 @@ export const NotificationsPage: React.FC<NotificationsPageProps> = ({
           </p>
         </div>
 
-        {unreadCount > 0 && (
-          <Button variant="outline" size="sm" onClick={onMarkAllRead}>
-            <CheckCheck className="w-4 h-4 mr-1 text-emerald-600" />
-            <span>Mark all as read ({unreadCount})</span>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleSendTestEmail}
+            disabled={sendingEmail}
+            className="border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-200"
+          >
+            <Mail className="w-3.5 h-3.5 mr-1 text-emerald-600 dark:text-emerald-400" />
+            <span>{sendingEmail ? "Sending..." : "Test Email Alert"}</span>
           </Button>
-        )}
+
+          {unreadCount > 0 && (
+            <Button variant="outline" size="sm" onClick={onMarkAllRead}>
+              <CheckCheck className="w-4 h-4 mr-1 text-emerald-600" />
+              <span>Mark all as read ({unreadCount})</span>
+            </Button>
+          )}
+        </div>
       </div>
+
+      {emailStatus && (
+        <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl flex items-center gap-2.5 text-xs text-emerald-700 dark:text-emerald-300">
+          <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+          <span className="font-bold">{emailStatus}</span>
+        </div>
+      )}
 
       {notifications.length === 0 ? (
         <div className="bg-white dark:bg-slate-900/90 p-12 rounded-2xl border border-slate-200 dark:border-slate-800 text-center max-w-md mx-auto shadow-sm space-y-3">
