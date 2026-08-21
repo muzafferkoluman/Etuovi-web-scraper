@@ -18,10 +18,10 @@ import {
   ShieldCheck,
   Heart,
   Scale,
-  SlidersHorizontal,
-  ChevronRight
+  SlidersHorizontal
 } from "lucide-react";
 import { FINNISH_CITIES } from "@koti-scout/shared";
+import { useTranslation } from "../../contexts/LanguageContext";
 
 export interface DashboardPageProps {
   stats: DashboardStats | null;
@@ -48,6 +48,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   runningSearchId,
   runFeedback
 }) => {
+  const { t } = useTranslation();
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
   const [heroCity, setHeroCity] = useState("Helsinki");
   const navigate = useNavigate();
@@ -77,18 +78,18 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             <div className="flex items-center gap-2 mb-2">
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                Live Property Radar Active
+                {t("nav.liveFeed")} {t("nav.radarActive")}
               </span>
               <span className="text-xs text-slate-400 font-medium">
-                • Helsinki EET
+                • Helsinki (EET)
               </span>
             </div>
 
             <h1 className="text-2xl sm:text-4xl font-black text-white font-mono tracking-tight">
-              Tervetuloa, <span className="text-emerald-400">Lina!</span> 👋
+              {t("dash.welcome")}
             </h1>
             <p className="text-xs sm:text-sm text-slate-300 mt-1 font-medium max-w-xl">
-              Canlı Etuovi emlak piyasası izleme ve fiyat düşüş tespit kontrol paneliniz.
+              {t("dash.welcomeSub")}
             </p>
           </div>
 
@@ -101,7 +102,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 className="bg-gradient-to-r from-emerald-500 to-teal-500 text-slate-950 font-bold hover:from-emerald-400 hover:to-teal-400 text-xs shadow-lg shadow-emerald-500/20"
               >
                 <Search className="w-3.5 h-3.5 mr-1.5" />
-                <span>İlan Ara</span>
+                <span>{t("dash.searchBtn")}</span>
               </Button>
             </Link>
 
@@ -112,7 +113,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 className="border-slate-700 bg-slate-900/80 text-slate-200 hover:text-white hover:bg-slate-800 text-xs"
               >
                 <SlidersHorizontal className="w-3.5 h-3.5 mr-1.5 text-emerald-400" />
-                <span>Radarları Yönet</span>
+                <span>{t("dash.manageRadars")}</span>
               </Button>
             </Link>
           </div>
@@ -123,40 +124,40 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           <div className="bg-slate-900/70 p-4 rounded-2xl border border-slate-800/80">
             <div className="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
               <Building className="w-3.5 h-3.5 text-emerald-400" />
-              <span>İzlenen İlan Havuzu</span>
+              <span>{t("dash.statListings")}</span>
             </div>
             <div className="text-xl sm:text-2xl font-black mt-1 text-white font-mono">
-              {stats?.checkedToday ?? properties.length} <span className="text-xs font-normal text-slate-400">ilan</span>
+              {stats?.checkedToday ?? properties.length} <span className="text-xs font-normal text-slate-400">{t("dash.unitListings")}</span>
             </div>
           </div>
 
           <div className="bg-slate-900/70 p-4 rounded-2xl border border-slate-800/80">
             <div className="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
               <TrendingDown className="w-3.5 h-3.5 text-rose-400" />
-              <span>Yakalanan Fiyat Düşüşü</span>
+              <span>{t("dash.statDrops")}</span>
             </div>
             <div className="text-xl sm:text-2xl font-black mt-1 text-rose-400 font-mono">
-              {stats?.priceDrops ?? priceDrops.length} <span className="text-xs font-normal text-rose-300">fırsat</span>
+              {stats?.priceDrops ?? priceDrops.length} <span className="text-xs font-normal text-rose-300">{t("dash.unitDrops")}</span>
             </div>
           </div>
 
           <div className="bg-slate-900/70 p-4 rounded-2xl border border-slate-800/80">
             <div className="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
               <Search className="w-3.5 h-3.5 text-amber-400" />
-              <span>Otomatik Radar Araması</span>
+              <span>{t("dash.statRadars")}</span>
             </div>
             <div className="text-xl sm:text-2xl font-black mt-1 text-amber-400 font-mono">
-              {savedSearches.length} <span className="text-xs font-normal text-slate-400">aktif</span>
+              {savedSearches.length} <span className="text-xs font-normal text-slate-400">{t("dash.unitActive")}</span>
             </div>
           </div>
 
           <div className="bg-slate-900/70 p-4 rounded-2xl border border-slate-800/80">
             <div className="text-[11px] font-semibold text-slate-400 flex items-center gap-1.5">
               <Heart className="w-3.5 h-3.5 text-rose-500" />
-              <span>Favori Evlerim</span>
+              <span>{t("dash.statFavorites")}</span>
             </div>
             <div className="text-xl sm:text-2xl font-black mt-1 text-white font-mono">
-              {favorites.length} <span className="text-xs font-normal text-slate-400">kayıtlı</span>
+              {favorites.length} <span className="text-xs font-normal text-slate-400">{t("dash.unitSaved")}</span>
             </div>
           </div>
         </div>
@@ -172,7 +173,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             >
               {FINNISH_CITIES.map((city) => (
                 <option key={city} value={city} className="bg-slate-900 text-white">
-                  {city} Bölgesindeki İlanları İncele
+                  {city} {t("dash.citySelectSuffix")}
                 </option>
               ))}
             </select>
@@ -184,7 +185,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             size="sm"
             className="w-full sm:w-auto text-xs font-bold px-5 bg-emerald-500 text-slate-950 hover:bg-emerald-400 transition-all"
           >
-            <span>{heroCity} İlanlarına Git</span>
+            <span>{heroCity} - {t("dash.cityJumpBtn")}</span>
             <ArrowRight className="w-3.5 h-3.5 ml-1" />
           </Button>
         </form>
@@ -198,7 +199,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               ✓
             </div>
             <div>
-              <p className="text-xs font-bold text-emerald-300">Radar Araması Tamamlandı</p>
+              <p className="text-xs font-bold text-emerald-300">{t("dash.radarCompleted")}</p>
               <p className="text-xs text-emerald-400">{runFeedback.message}</p>
             </div>
           </div>
@@ -218,10 +219,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
                   <Flame className="w-4 h-4" />
                 </div>
-                <h2 className="text-lg font-black text-white">Günün En İyi Fırsatları & Yüksek Skorlu Evler</h2>
+                <h2 className="text-lg font-black text-white">{t("dash.topBargains")}</h2>
               </div>
               <Link to="/search" className="text-xs font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
-                <span>Tümünü gör ({properties.length})</span>
+                <span>{t("dash.viewAll")} ({properties.length})</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -249,10 +250,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   <div className="p-1.5 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/20">
                     <TrendingDown className="w-4 h-4" />
                   </div>
-                  <h2 className="text-lg font-black text-white">Son Fiyat İndirimleri</h2>
+                  <h2 className="text-lg font-black text-white">{t("dash.priceDrops")}</h2>
                 </div>
                 <Link to="/search" className="text-xs font-bold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
-                  <span>Tüm indirimleri gör</span>
+                  <span>{t("dash.viewAllDrops")}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -282,16 +283,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
               <div className="flex items-center gap-2">
                 <Search className="w-4 h-4 text-emerald-400" />
-                <h3 className="text-sm font-bold text-white">Aktif Arama Radarları</h3>
+                <h3 className="text-sm font-bold text-white">{t("dash.activeRadars")}</h3>
               </div>
               <Link to="/saved-searches" className="text-xs text-emerald-400 hover:underline font-semibold">
-                Yönet →
+                {t("dash.manage")}
               </Link>
             </div>
 
             {savedSearches.length === 0 ? (
               <div className="p-4 text-center text-xs text-slate-400">
-                Henüz kayıtlı radarınız yok. İlan arama sayfasından filtrelerinizi radar olarak kaydedebilirsiniz.
+                {t("dash.noRadars")}
               </div>
             ) : (
               <div className="space-y-3">
@@ -309,15 +310,15 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                       </div>
 
                       <div className="text-[11px] text-slate-400 flex items-center justify-between">
-                        <span>{search.filters.cities?.join(", ") || "Tüm Şehirler"}</span>
+                        <span>{search.filters.cities?.join(", ") || "All Cities"}</span>
                         {search.filters.maxPrice && (
-                          <span>Maks €{search.filters.maxPrice.toLocaleString("fi-FI")}</span>
+                          <span>Max €{search.filters.maxPrice.toLocaleString("fi-FI")}</span>
                         )}
                       </div>
 
                       <div className="pt-2 border-t border-slate-800/50 flex items-center justify-between">
                         <span className="text-[10px] text-slate-500">
-                          Min Skor: {search.minimumScore}
+                          {t("dash.minScore")}: {search.minimumScore}
                         </span>
                         <button
                           type="button"
@@ -326,7 +327,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                           className="px-2.5 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500 text-emerald-300 hover:text-slate-950 text-[11px] font-bold transition-colors flex items-center gap-1"
                         >
                           <Play className="w-2.5 h-2.5" />
-                          <span>{isRunning ? "Taranıyor..." : "Şimdi Tara"}</span>
+                          <span>{isRunning ? t("dash.running") : t("dash.runNow")}</span>
                         </button>
                       </div>
                     </div>
@@ -336,16 +337,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             )}
           </div>
 
-          {/* Quick Compare Dock Widget (if properties are being compared) */}
+          {/* Quick Compare Dock Widget */}
           {comparedProperties.length > 0 && (
             <div className="bg-slate-900/90 p-5 rounded-2xl border border-emerald-500/30 shadow-xl space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-white text-xs font-bold">
                   <Scale className="w-4 h-4 text-emerald-400" />
-                  <span>Karşılaştırma Listesi ({comparedProperties.length}/4)</span>
+                  <span>{t("dash.compareDock")} ({comparedProperties.length}/4)</span>
                 </div>
                 <Link to="/compare" className="text-xs text-emerald-400 hover:underline font-bold">
-                  Kıyasla →
+                  {t("dash.compareNow")}
                 </Link>
               </div>
 
@@ -364,10 +365,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           <div className="p-4 rounded-2xl bg-slate-900/50 border border-slate-800/80 text-xs text-slate-400 space-y-1.5">
             <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
               <ShieldCheck className="w-4 h-4" />
-              <span>Kişisel Veri Radarı</span>
+              <span>{t("dash.personalRadar")}</span>
             </div>
             <p className="text-[11px] text-slate-400 leading-relaxed">
-              Tüm arama kriterleriniz ve indirim takipleriniz doğrudan bu panel üzerinden otomatik güncellenir.
+              {t("dash.personalRadarDesc")}
             </p>
           </div>
 

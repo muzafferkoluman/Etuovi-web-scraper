@@ -8,10 +8,14 @@ import {
   CheckCheck,
   TrendingDown,
   Building,
-  LayoutDashboard
+  LayoutDashboard,
+  Globe,
+  ChevronDown,
+  Check
 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { AppNotification } from "@koti-scout/shared";
+import { useTranslation, SUPPORTED_LANGUAGES, SupportedLanguage } from "../contexts/LanguageContext";
 
 export interface NavbarProps {
   notifications?: AppNotification[];
@@ -33,15 +37,17 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenNotificationProperty
 }) => {
   const location = useLocation();
+  const { t, language, setLanguage, currentLanguageOption } = useTranslation();
   const [showNotifMenu, setShowNotifMenu] = useState(false);
+  const [showLangMenu, setShowLangMenu] = useState(false);
 
-  // Simplified Clean Menu Items: 3 essential tabs
+  // Simplified Clean Menu Items with i18n
   const navItems = [
-    { path: "/", label: "Dashboard", icon: LayoutDashboard },
-    { path: "/search", label: "Explore Properties", icon: Search },
+    { path: "/", label: t("nav.dashboard"), icon: LayoutDashboard },
+    { path: "/search", label: t("nav.explore"), icon: Search },
     { 
       path: "/favorites", 
-      label: "Favorites", 
+      label: t("nav.favorites"), 
       icon: Heart, 
       badge: favoritesCount > 0 ? favoritesCount : undefined 
     }
@@ -66,7 +72,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </span>
                 <span className="px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 rounded-full flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-                  Etuovi Live
+                  {t("nav.liveFeed")}
                 </span>
               </div>
               <p className="text-[10px] text-slate-400 font-medium hidden sm:block">
@@ -75,7 +81,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </Link>
 
-          {/* Simplified Desktop Navigation Bar */}
+          {/* Desktop Navigation Bar */}
           <nav className="hidden md:flex items-center gap-2 bg-slate-900/60 p-1.5 rounded-2xl border border-slate-800/80 backdrop-blur-md">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -107,9 +113,54 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* Right Action Controls: Live Status, Bell, Lina Profile */}
-          <div className="flex items-center gap-3">
+          {/* Right Action Controls: Language Switcher, Notifications Bell, Lina Profile */}
+          <div className="flex items-center gap-2.5">
             
+            {/* Language Selector Dropdown */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setShowLangMenu(!showLangMenu)}
+                className="flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-slate-900/80 text-slate-200 hover:text-white border border-slate-800 hover:border-slate-700 transition-all text-xs font-bold"
+                aria-label="Change language"
+              >
+                <span className="text-sm">{currentLanguageOption.flag}</span>
+                <span className="uppercase font-mono text-[11px]">{currentLanguageOption.code}</span>
+                <ChevronDown className="w-3 h-3 text-slate-400" />
+              </button>
+
+              {showLangMenu && (
+                <div className="absolute right-0 mt-2 w-44 bg-slate-900 rounded-2xl shadow-2xl border border-slate-800 overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 p-1.5">
+                  <div className="px-3 py-1.5 text-[10px] font-black uppercase tracking-wider text-slate-400 border-b border-slate-800 mb-1 flex items-center gap-1.5">
+                    <Globe className="w-3 h-3 text-emerald-400" />
+                    <span>Language</span>
+                  </div>
+                  {SUPPORTED_LANGUAGES.map((lang) => (
+                    <button
+                      key={lang.code}
+                      type="button"
+                      onClick={() => {
+                        setLanguage(lang.code);
+                        setShowLangMenu(false);
+                      }}
+                      className={cn(
+                        "w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-colors text-left",
+                        language === lang.code
+                          ? "bg-emerald-500/15 text-emerald-400 font-bold border border-emerald-500/20"
+                          : "text-slate-300 hover:bg-slate-800/70 hover:text-white"
+                      )}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-base">{lang.flag}</span>
+                        <span>{lang.nativeName}</span>
+                      </div>
+                      {language === lang.code && <Check className="w-3.5 h-3.5 text-emerald-400" />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             {/* Notification Bell Dropdown */}
             <div className="relative">
               <button
@@ -133,7 +184,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <div className="flex items-center gap-2">
                       <Bell className="w-4 h-4 text-emerald-400" />
                       <span className="text-xs font-bold text-white uppercase tracking-wider">
-                        Live Notifications ({unreadCount})
+                        {t("nav.notifications")} ({unreadCount})
                       </span>
                     </div>
                     {unreadCount > 0 && (
@@ -143,7 +194,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1"
                       >
                         <CheckCheck className="w-3.5 h-3.5" />
-                        Mark all read
+                        {t("nav.markAllRead")}
                       </button>
                     )}
                   </div>
@@ -151,7 +202,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <div className="max-h-80 overflow-y-auto divide-y divide-slate-800/60">
                     {notifications.length === 0 ? (
                       <div className="p-6 text-center text-xs text-slate-400">
-                        No active notifications yet. Price drops and radar matches will appear here.
+                        {t("nav.noNotifications")}
                       </div>
                     ) : (
                       notifications.slice(0, 6).map((n) => (
@@ -202,7 +253,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       onClick={() => setShowNotifMenu(false)}
                       className="text-xs text-emerald-400 hover:text-emerald-300 font-bold"
                     >
-                      View all notification logs →
+                      {t("nav.viewAll")}
                     </Link>
                   </div>
                 </div>
@@ -210,10 +261,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             {/* Dedicated Lina Profile Pill */}
-            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs font-bold text-slate-200 shadow-sm">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/90 border border-emerald-500/30 text-xs font-bold text-slate-200 shadow-sm">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span className="text-white font-mono tracking-wide">Lina</span>
-              <span className="text-emerald-400/80 font-semibold text-[11px] hidden sm:inline">• Radar Active</span>
+              <span className="text-emerald-400/80 font-semibold text-[11px] hidden sm:inline">• {t("nav.radarActive")}</span>
             </div>
           </div>
         </div>

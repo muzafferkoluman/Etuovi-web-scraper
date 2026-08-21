@@ -1,3 +1,4 @@
+import { useTranslation } from "../../contexts/LanguageContext";
 import React from 'react';
 import { Property } from '@koti-scout/shared';
 import { formatEuro, formatSqmPrice } from '../../lib/utils';
@@ -22,6 +23,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   onToggleCompare,
   onViewDetails
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="nordic-card rounded-2xl overflow-hidden flex flex-col group bg-white border border-slate-200">
       {/* Thumbnail & Badges */}
@@ -125,7 +127,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
               <span className="font-semibold text-slate-800">{property.area} m²</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Rooms:</span>
+              <span className="text-slate-500">{t("prop.rooms")}:</span>
               <span className="font-semibold text-slate-800">{property.rooms} rooms</span>
             </div>
             <div className="flex justify-between">
@@ -133,14 +135,14 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
               <span className="font-semibold text-slate-800">{formatSqmPrice(property.pricePerSquareMeter)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-500">Built:</span>
+              <span className="text-slate-500">{t("prop.built")}:</span>
               <span className="font-semibold text-slate-800">{property.buildYear || '—'}</span>
             </div>
           </div>
 
           {/* Maintenance fee & Deal indicator */}
           <div className="flex items-center justify-between text-xs mb-2">
-            <span className="text-slate-500">Maintenance:</span>
+            <span className="text-slate-500">{t("prop.maintenance")}:</span>
             <span className="font-semibold text-slate-700">
               {property.maintenanceFee ? `${property.maintenanceFee} €/mo` : 'N/A'}
             </span>
