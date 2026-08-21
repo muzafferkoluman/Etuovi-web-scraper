@@ -17,10 +17,10 @@ import {
 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { cn } from "../lib/utils";
-import { PropertyNotification } from "@koti-scout/shared";
+import { AppNotification } from "@koti-scout/shared";
 
 export interface NavbarProps {
-  notifications?: PropertyNotification[];
+  notifications?: AppNotification[];
   unreadCount?: number;
   compareCount?: number;
   onMarkRead?: (id: string) => void;
