@@ -93,7 +93,7 @@ export const AppContent: React.FC = () => {
     queryFn: () => api.getUserPreferences()
   });
 
-  const favoriteIds = favorites.map((f) => f.propertyId);
+  const favoriteIds = (favorites || []).map((f: any) => f.propertyId);
   const notifications = notifData?.notifications || [];
   const unreadCount = notifData?.unreadCount || 0;
   const properties = searchResult?.properties || [];
