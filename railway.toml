@@ -1,12 +1,9 @@
-# Railway Deployment Config for KotiScout API
-# This file configures the Fastify backend for Railway.app
-
 [build]
 builder = "nixpacks"
-buildCommand = "npm run build:api"
+buildCommand = "npm ci"
 
 [deploy]
-startCommand = "node apps/api/dist/server.js"
+startCommand = "npx tsx apps/api/src/server.ts"
 healthcheckPath = "/health"
 healthcheckTimeout = 30
 restartPolicyType = "on_failure"

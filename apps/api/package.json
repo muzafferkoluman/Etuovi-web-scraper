@@ -20,12 +20,12 @@
     "dotenv": "^16.4.7",
     "fastify": "^5.2.0",
     "nodemailer": "^9.0.5",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "tsx": "^4.19.2"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
     "@types/nodemailer": "^8.0.1",
-    "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   }
