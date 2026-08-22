@@ -17,8 +17,13 @@ export function buildServer() {
     logger: process.env.NODE_ENV === 'test' ? false : { level: 'info' }
   });
 
+  const allowedOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
+    : true;
+
   server.register(cors, {
-    origin: true,
+    origin: allowedOrigins,
+    credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS']
   });
 

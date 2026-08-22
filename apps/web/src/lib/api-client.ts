@@ -13,7 +13,9 @@ import {
   PropertyEvent
 } from '@koti-scout/shared';
 
-const API_BASE = '/api';
+const API_BASE = (import.meta.env.VITE_API_URL as string)
+  ? `${import.meta.env.VITE_API_URL}/api`
+  : '/api';
 
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
   const token = localStorage.getItem('kotiscout_auth_token');

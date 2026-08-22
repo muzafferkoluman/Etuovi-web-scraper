@@ -1,7 +1,7 @@
 {
   "name": "koti-scout",
   "version": "1.0.1",
-  "description": "KotiScout — AI Assisted Finnish Property Finder",
+  "description": "KotiScout \u2014 AI Assisted Finnish Property Finder",
   "private": true,
   "workspaces": [
     "packages/*",
@@ -19,7 +19,9 @@
     "db:generate": "npm run db:generate --workspace=@koti-scout/database",
     "db:migrate": "npm run db:migrate --workspace=@koti-scout/database",
     "db:seed": "npm run db:seed --workspace=@koti-scout/database",
-    "build:all": "npm run build --workspaces --if-present"
+    "build:all": "npm run build --workspaces --if-present",
+    "build:api": "npm run build --workspace=@koti-scout/api",
+    "start:api": "node apps/api/dist/server.js"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
